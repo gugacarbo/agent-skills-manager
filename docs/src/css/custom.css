@@ -1,0 +1,115 @@
+/* You can override the default Infima variables here. */
+
+:root {
+	/* Primary — VS Code blue */
+	--ifm-color-primary: #007acc;
+	--ifm-color-primary-dark: #006db3;
+	--ifm-color-primary-darker: #0066a8;
+	--ifm-color-primary-darkest: #00558d;
+	--ifm-color-primary-light: #1a8ad4;
+	--ifm-color-primary-lighter: #3399dd;
+	--ifm-color-primary-lightest: #66b3e6;
+
+	--ifm-code-font-size: 95%;
+	--docusaurus-highlighted-code-line-bg: rgba(0, 122, 204, 0.1);
+
+	/* Font */
+	--ifm-font-family-base:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+		Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+	--ifm-color-primary: #3ea8ff;
+	--ifm-color-primary-dark: #1a96f5;
+	--ifm-color-primary-darker: #0d8ee8;
+	--ifm-color-primary-darkest: #007acc;
+	--ifm-color-primary-light: #5cb8ff;
+	--ifm-color-primary-lighter: #7ec6ff;
+	--ifm-color-primary-lightest: #b3ddff;
+	--docusaurus-highlighted-code-line-bg: rgba(0, 122, 204, 0.2);
+
+	/* Background */
+	--ifm-background-color: #1e1e1e;
+	--ifm-background-secondary: #252526;
+}
+
+/* Hero */
+.hero {
+	padding: 4rem 0;
+}
+
+.hero__title {
+	font-size: 3rem;
+}
+
+.hero__buttons {
+	display: flex;
+	gap: 1rem;
+	margin-top: 2rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+/* Features */
+.features-section {
+	padding: 4rem 0;
+}
+
+.feature-item {
+	text-align: center;
+	padding: 2rem 1.5rem;
+}
+
+.feature-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.feature-item h3 {
+	margin-bottom: 0.75rem;
+}
+
+.feature-item p {
+	color: var(--ifm-color-emphasis-700);
+	font-size: 0.95rem;
+	line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+	backdrop-filter: blur(12px);
+}
+
+/* Tables */
+table {
+	display: table;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th,
+td {
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid var(--ifm-color-emphasis-200);
+	text-align: left;
+}
+
+th {
+	background-color: var(--ifm-color-emphasis-100);
+	font-weight: 600;
+}
+
+/* Code blocks */
+code {
+	border-radius: 4px;
+}
+
+pre {
+	border-radius: 8px;
+}
+
+/* Admonitions */
+.admonition {
+	border-radius: 8px;
+}
