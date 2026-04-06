@@ -12,10 +12,10 @@ const config: Config = {
 		v4: true,
 	},
 
-	url: "https://your-docusaurus-site.example.com",
-	baseUrl: "/",
+	url: "https://gugacarbo.github.io",
+	baseUrl: "/agent-skills-manager/",
 
-	organizationName: "agent-skills-manager",
+	organizationName: "gugacarbo",
 	projectName: "agent-skills-manager",
 
 	onBrokenLinks: "throw",
@@ -31,10 +31,7 @@ const config: Config = {
 			{
 				docs: {
 					sidebarPath: "./sidebars.ts",
-					editUrl: "https://github.com/agent-skills-manager/docs/tree/main/",
-				},
-				blog: {
-					showReadingTime: true,
+					editUrl: "https://github.com/gugacarbo/agent-skills-manager/tree/main/docs/",
 				},
 				theme: {
 					customCss: "./src/css/custom.css",
@@ -63,7 +60,6 @@ const config: Config = {
 					position: "left",
 					label: "Documentação",
 				},
-				{ to: "/blog", label: "Blog", position: "left" },
 			],
 		},
 		footer: {

@@ -1,1 +1,254 @@
-/* Page styles go here */
+/* Homepage styles */
+
+.hero {
+	padding: 5rem 0 3rem;
+	background: linear-gradient(
+		180deg,
+		var(--ifm-color-primary-darkest) 0%,
+		var(--ifm-background-color) 100%
+	);
+}
+
+.hero .container {
+	text-align: center;
+}
+
+.hero__title {
+	font-size: 3.5rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	margin-bottom: 1rem;
+}
+
+.hero__subtitle {
+	font-size: 1.25rem;
+	max-width: 640px;
+	margin: 0 auto;
+	opacity: 0.9;
+	line-height: 1.6;
+}
+
+.hero__buttons {
+	display: flex;
+	gap: 1rem;
+	margin-top: 2rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+/* Tech badges */
+.tech-badges {
+	display: flex;
+	justify-content: center;
+	gap: 0.75rem;
+	margin-top: 2.5rem;
+	flex-wrap: wrap;
+}
+
+.tech-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.35rem 0.75rem;
+	border-radius: 999px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	background: rgba(255, 255, 255, 0.15);
+	color: var(--ifm-color-white);
+	backdrop-filter: blur(4px);
+	transition: background 0.2s;
+}
+
+.tech-badge:hover {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+/* Features */
+.features-section {
+	padding: 5rem 0;
+}
+
+.features-section .container {
+	max-width: 960px;
+}
+
+.section-header {
+	text-align: center;
+	margin-bottom: 3.5rem;
+}
+
+.section-header h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	margin-bottom: 0.75rem;
+}
+
+.section-header p {
+	font-size: 1.1rem;
+	color: var(--ifm-color-emphasis-600);
+	max-width: 560px;
+	margin: 0 auto;
+}
+
+.feature-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+	.feature-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 996px) and (min-width: 769px) {
+	.feature-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.feature-card {
+	padding: 2rem 1.5rem;
+	border-radius: 12px;
+	border: 1px solid var(--ifm-color-emphasis-200);
+	background: var(--ifm-background-color);
+	transition: all 0.25s ease;
+}
+
+[data-theme="dark"] .feature-card {
+	border-color: var(--ifm-color-emphasis-300);
+}
+
+.feature-card:hover {
+	border-color: var(--ifm-color-primary);
+	box-shadow: 0 4px 20px rgba(0, 122, 204, 0.12);
+	transform: translateY(-2px);
+}
+
+.feature-icon {
+	font-size: 2.5rem;
+	margin-bottom: 1rem;
+	display: block;
+}
+
+.feature-card h3 {
+	font-size: 1.1rem;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+	font-size: 0.9rem;
+	color: var(--ifm-color-emphasis-700);
+	line-height: 1.65;
+	margin: 0;
+}
+
+/* Architecture section */
+.architecture-section {
+	padding: 5rem 0;
+	background: var(--ifm-background-secondary);
+}
+
+.architecture-section .container {
+	max-width: 960px;
+	text-align: center;
+}
+
+.architecture-section h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	margin-bottom: 0.75rem;
+}
+
+.architecture-section > .container > p {
+	color: var(--ifm-color-emphasis-600);
+	margin-bottom: 2rem;
+}
+
+/* Quick start section */
+.quickstart-section {
+	padding: 5rem 0;
+}
+
+.quickstart-section .container {
+	max-width: 720px;
+}
+
+.quickstart-section h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	text-align: center;
+	margin-bottom: 0.75rem;
+}
+
+.quickstart-section > .container > p {
+	text-align: center;
+	color: var(--ifm-color-emphasis-600);
+	margin-bottom: 2rem;
+}
+
+.quickstart-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1rem;
+	counter-reset: step;
+}
+
+@media (max-width: 576px) {
+	.quickstart-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.step-card {
+	position: relative;
+	padding: 1.5rem;
+	border-radius: 10px;
+	border: 1px solid var(--ifm-color-emphasis-200);
+	counter-increment: step;
+	transition: border-color 0.2s;
+}
+
+[data-theme="dark"] .step-card {
+	border-color: var(--ifm-color-emphasis-300);
+}
+
+.step-card:hover {
+	border-color: var(--ifm-color-primary);
+}
+
+.step-card::before {
+	content: counter(step);
+	position: absolute;
+	top: -0.65rem;
+	left: 1.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.3rem;
+	height: 1.3rem;
+	border-radius: 50%;
+	background: var(--ifm-color-primary);
+	color: #fff;
+	font-size: 0.75rem;
+	font-weight: 700;
+}
+
+.step-card h3 {
+	font-size: 0.95rem;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+}
+
+.step-card p {
+	font-size: 0.85rem;
+	color: var(--ifm-color-emphasis-700);
+	margin: 0;
+	line-height: 1.55;
+}
+
+.step-card code {
+	font-size: 0.8rem;
+}
