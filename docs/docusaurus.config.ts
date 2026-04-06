@@ -31,7 +31,8 @@ const config: Config = {
 			{
 				docs: {
 					sidebarPath: "./sidebars.ts",
-					editUrl: "https://github.com/gugacarbo/agent-skills-manager/tree/main/docs/",
+					editUrl:
+						"https://github.com/gugacarbo/agent-skills-manager/tree/main/docs/",
 				},
 				theme: {
 					customCss: "./src/css/custom.css",

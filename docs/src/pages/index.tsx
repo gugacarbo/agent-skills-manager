@@ -66,8 +66,8 @@ function HomepageFeatures(): ReactNode {
 				<div className={styles.sectionHeader}>
 					<h2>Recursos Principais</h2>
 					<p>
-						Tudo que você precisa para gerenciar skills de IA com
-						eficiência e segurança.
+						Tudo que você precisa para gerenciar skills de IA com eficiência e
+						segurança.
 					</p>
 				</div>
 				<div className={styles.featureGrid}>
@@ -118,31 +118,29 @@ function QuickStart(): ReactNode {
 						<h3>Configurar Source Path</h3>
 						<p>
 							Abra as settings (<code>Ctrl+,</code>) e defina{" "}
-							<code>agentSkillsManager.skillSourcePath</code> com o
-							caminho do seu repositório de skills.
+							<code>agentSkillsManager.skillSourcePath</code> com o caminho do
+							seu repositório de skills.
 						</p>
 					</div>
 					<div className={styles.stepCard}>
 						<h3>Abrir a Sidebar</h3>
 						<p>
-							Clique no ícone <strong>Agent Skills</strong> na
-							activity bar do VS Code para abrir o Skills Explorer.
+							Clique no ícone <strong>Agent Skills</strong> na activity bar do
+							VS Code para abrir o Skills Explorer.
 						</p>
 					</div>
 					<div className={styles.stepCard}>
 						<h3>Ativar Skills</h3>
 						<p>
-							Use o toggle (ícone de olho) na TreeView para ativar
-							skills por workspace. Elas são sincronizadas
-							automaticamente.
+							Use o toggle (ícone de olho) na TreeView para ativar skills por
+							workspace. Elas são sincronizadas automaticamente.
 						</p>
 					</div>
 					<div className={styles.stepCard}>
 						<h3>Configurar Destinos</h3>
 						<p>
-							Nas settings, defina{" "}
-							<code>agentSkillsManager.destinations</code> para onde
-							as skills serão copiadas (Claude, Copilot, custom).
+							Nas settings, defina <code>agentSkillsManager.destinations</code>{" "}
+							para onde as skills serão copiadas (Claude, Copilot, custom).
 						</p>
 					</div>
 				</div>
@@ -160,13 +158,6 @@ export default function Home(): ReactNode {
 				<HomepageFeatures />
 				<QuickStart />
 			</main>
-		</Layout>
-	);
-}
-			description="Gerencie, sincronize e valide skills de agentes de IA (Claude Desktop, VS Code Copilot) a partir de um repositório git central."
-		>
-			<HomepageHeader />
-			<HomepageFeatures />
 		</Layout>
 	);
 }
