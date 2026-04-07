@@ -67,8 +67,10 @@ function HomepageFeatures(): ReactNode {
 				<div className={styles.sectionHeader}>
 					<h2>Recursos Principais</h2>
 					<p>
-						Tudo que você precisa para gerenciar skills de IA com eficiência e
-						segurança.
+						Tudo que você precisa para gerenciar arquivos de agentes de IA
+						(skills, rules, agents.md, prompts.md, etc.) com eficiência e
+						segurança, incluindo seleção de padrões de salvamento para
+						diferentes plataformas (Claude, Copilot, etc.).
 					</p>
 				</div>
 				<div className={styles.featureGrid}>
@@ -120,7 +122,8 @@ function QuickStart(): ReactNode {
 						<p>
 							Abra as settings (<code>Ctrl+,</code>) e defina{" "}
 							<code>agentSkillsManager.skillSourcePath</code> com o caminho do
-							seu repositório de skills.
+							seu repositório de arquivos de agentes de IA (skills, rules,
+							agents.md, prompts.md, etc.).
 						</p>
 					</div>
 					<div className={styles.stepCard}>

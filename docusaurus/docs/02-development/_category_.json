@@ -1,7 +1,7 @@
 {
     "position": 2,
-    "label": "Planejamento",
-    "key": "planning",
+    "label": "Desenvolvimento",
+    "key": "development",
     "collapsible": false,
     "collapsed": false,
     "className": "red",

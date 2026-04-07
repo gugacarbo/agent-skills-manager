@@ -1,7 +1,7 @@
 {
 	"name": "extension",
 	"displayName": "Agent Skills Manager",
-	"description": "VS Code extension for Agent Skills Manager",
+	"description": "VS Code extension for managing AI agent files with support for multiple save patterns (Claude, Copilot, etc.)",
 	"version": "0.0.1",
 	"private": true,
 	"engines": {

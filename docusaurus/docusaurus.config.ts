@@ -5,14 +5,14 @@ import { themes as prismThemes } from "prism-react-renderer";
 const config: Config = {
 	title: "Agent Skills Manager",
 	tagline:
-		"Gerencie, sincronize e valide skills de agentes de IA a partir de um repositório git central",
+		"Gerencie, sincronize e valide arquivos de agentes de IA com suporte a múltiplos padrões de salvamento (Claude, Copilot, etc.)",
 	favicon: "img/favicon.ico",
 
 	future: {
 		v4: true,
 	},
 
-	onBrokenLinks: "throw",
+	onBrokenLinks: "warn",
 
 	url: "https://gugacarbo.github.io/",
 	baseUrl: "/agent-skills-manager/",
@@ -29,6 +29,8 @@ const config: Config = {
 					sidebarPath: "./sidebars.ts",
 					editUrl:
 						"https://github.com/gugacarbo/agent-skills-manager/tree/main/docusaurus/",
+					showLastUpdateAuthor: false,
+					showLastUpdateTime: true,
 				},
 				theme: {
 					customCss: "./src/css/custom.css",
@@ -40,6 +42,7 @@ const config: Config = {
 		mermaid: true,
 	},
 	themes: ["@docusaurus/theme-mermaid"],
+
 	themeConfig: {
 		colorMode: {
 			respectPrefersColorScheme: true,
