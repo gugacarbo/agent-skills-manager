@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "docs/**"
+      - "docusaurus/**"
       - ".github/workflows/deploy-docs.yml"
   workflow_dispatch:
 
@@ -34,7 +34,7 @@ jobs:
           cache: pnpm
 
       - name: Build website
-        working-directory: docs
+        working-directory: docusaurus
         run: |
           pnpm install --frozen-lockfile
           pnpm build
@@ -42,7 +42,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./docs/build
+          path: ./docusaurus/build
 
   deploy:
     environment:

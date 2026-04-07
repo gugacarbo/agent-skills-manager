@@ -1,0 +1,52 @@
+{
+	"name": "extension",
+	"displayName": "Agent Skills Manager",
+	"description": "VS Code extension for Agent Skills Manager",
+	"version": "0.0.1",
+	"private": true,
+	"engines": {
+		"vscode": "^1.84.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "agent-skills-manager.helloWorld",
+				"title": "Hello World"
+			}
+		]
+	},
+	"scripts": {
+		"dev": "pnpm run watch",
+		"build": "node esbuild.js --production",
+		"vscode:prepublish": "pnpm run package",
+		"compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
+		"watch": "npm-run-all -p watch:*",
+		"watch:esbuild": "node esbuild.js --watch",
+		"watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+		"package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
+		"compile-tests": "tsc -p . --outDir out",
+		"watch-tests": "tsc -p . -w --outDir out",
+		"pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+		"typecheck": "pnpm run check-types",
+		"clean": "rm -rf dist out",
+		"check-types": "tsc --noEmit",
+		"lint": "biome lint src",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.84.0",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "22.x",
+		"@biomejs/biome": "^2.4.10",
+		"esbuild": "^0.27.3",
+		"npm-run-all": "^4.1.5",
+		"typescript": "^5.9.3",
+		"@vscode/test-cli": "^0.0.12",
+		"@vscode/test-electron": "^2.5.2"
+	}
+}

@@ -1,0 +1,10 @@
+packages:
+  - "docusaurus"
+  - "extension"
+  - "webview"
+  - "shared"
+allowBuilds:
+  core-js: true
+  core-js-pure: true
+  esbuild: true
+  msw: true

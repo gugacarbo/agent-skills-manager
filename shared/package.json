@@ -1,0 +1,16 @@
+{
+	"name": "shared",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit -p tsconfig.json",
+		"clean": "rm -rf dist"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"devDependencies": {
+		"typescript": "^5.9.3"
+	}
+}

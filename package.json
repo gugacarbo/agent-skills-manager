@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "dev:docs": "cd docs && pnpm start",
-    "build:docs": "cd docs && pnpm build"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
-  "dependencies": {}
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "biome:check": "biome check . --write",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf .turbo"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
+    "turbo": "^2.9.4"
+  }
 }
