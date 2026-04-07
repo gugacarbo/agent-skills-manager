@@ -26,7 +26,7 @@ function HomepageHeader(): ReactNode {
 					</Link>
 					<Link
 						className="button button--outline button--lg"
-						to="/docs/architecture-and-dev-guide"
+						to="/docs/planning/architecture-and-dev-guide"
 					>
 						🚀 Primeiros Passos
 					</Link>
