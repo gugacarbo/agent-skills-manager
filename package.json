@@ -8,8 +8,10 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
+    "install:all": "turbo run install",
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "test": "turbo run test",
     "biome:check": "biome check . --write",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && rm -rf .turbo"

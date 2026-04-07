@@ -19,16 +19,12 @@ This is **NOT** end-user documentation. For user-facing docs, see the extension 
 ### Installation
 
 ```bash
-npm install
-# or
 pnpm install
 ```
 
 ### Local Development Server
 
 ```bash
-npm start
-# or
 pnpm start
 ```
 
@@ -37,26 +33,10 @@ This command starts a local development server and opens a browser window. Most 
 ### Build Documentation Site
 
 ```bash
-npm run build
-# or
 pnpm build
 ```
 
 Generates static content into the `build` directory that can be served using any static content hosting service.
-
-## Documentation Structure
-
-```
-docusaurus/docs/
-├── development-setup.md        # Setting up dev environment
-├── architecture.md             # System architecture
-├── project-structure.md        # Codebase organization
-├── internal-components.md      # Component API reference
-├── development-phases.md       # Implementation roadmap
-├── testing.md                  # Testing strategies
-├── configuration.md            # Configuration reference
-└── ...
-```
 
 ## Contributing to Docs
 
@@ -67,8 +47,4 @@ When adding new documentation:
 3. Include code examples with TypeScript syntax
 4. Keep technical accuracy as priority over brevity
 5. Update sidebars.ts if adding new pages
-
-## Deployment
-
-Deployment is automated via GitHub Actions (see `.github/workflows/` in main repo).
 

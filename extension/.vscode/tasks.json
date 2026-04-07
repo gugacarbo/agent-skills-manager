@@ -16,18 +16,6 @@
 		},
 		{
 			"type": "npm",
-			"script": "watch:esbuild",
-			"group": "build",
-			"problemMatcher": "$esbuild-watch",
-			"isBackground": true,
-			"label": "npm: watch:esbuild",
-			"presentation": {
-				"group": "watch",
-				"reveal": "never"
-			}
-		},
-		{
-			"type": "npm",
 			"script": "watch:tsc",
 			"group": "build",
 			"problemMatcher": "$tsc-watch",

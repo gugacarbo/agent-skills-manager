@@ -17,15 +17,16 @@ function HomepageHeader(): ReactNode {
 					{siteConfig.tagline}
 				</p>
 				<div className={`hero__buttons ${styles.hero__buttons}`}>
+					{" "}
 					<Link
 						className="button button--secondary button--lg"
-						to="/docs/getting-started/intro"
+						to="/docs/planning/intro"
 					>
 						📖 Documentação
 					</Link>
 					<Link
 						className="button button--outline button--lg"
-						to="/docs/getting-started/development-setup"
+						to="/docs/architecture-and-dev-guide"
 					>
 						🚀 Primeiros Passos
 					</Link>

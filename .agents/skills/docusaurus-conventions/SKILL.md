@@ -1,7 +1,8 @@
 ---
 name: docusaurus-conventions
 description: Docusaurus file naming, syntax, and structure conventions for RoboLearn platform
-domain: authoring
+---
+<!-- domain: authoring
 version: 1.0.0
 created: 2025-11-29
 triggers:
@@ -11,8 +12,7 @@ triggers:
   - Fixing Docusaurus build errors
 learned_from:
   - Module 1 ROS 2 implementation (2025-11-29)
-  - 8 file extension fixes, 10 mermaid removals, 3 MDX syntax errors
----
+  - 8 file extension fixes, 10 mermaid removals, 3 MDX syntax errors -->
 
 # Docusaurus Conventions Skill
 

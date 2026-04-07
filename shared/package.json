@@ -11,6 +11,8 @@
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"devDependencies": {
+		"@types/node": "^25.5.2",
+		"@types/vscode": "^1.110.0",
 		"typescript": "^5.9.3"
 	}
 }

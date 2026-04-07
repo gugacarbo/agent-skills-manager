@@ -87,6 +87,12 @@ importers:
 
   shared:
     devDependencies:
+      '@types/node':
+        specifier: ^25.5.2
+        version: 25.5.2
+      '@types/vscode':
+        specifier: ^1.110.0
+        version: 1.110.0
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
