@@ -20,7 +20,7 @@ function HomepageHeader(): ReactNode {
 					{" "}
 					<Link
 						className="button button--secondary button--lg"
-						to="/docs/planning/intro"
+						to="/docs/planning/architecture-and-dev-guide"
 					>
 						📖 Documentação
 					</Link>

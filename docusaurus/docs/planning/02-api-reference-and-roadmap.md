@@ -188,13 +188,6 @@ interface DestinationConfig {
 
 ### Estado atual
 
-- Monorepo configurado com 4 workspaces (docs, extension, webview, shared).
-- Infraestrutura de build funcional (Turborepo + esbuild + Vite).
-- Documentação técnica completa (Docusaurus).
-- Extension scaffold com comando hello world.
-- Webview scaffold com React 19, Tailwind 4 e shadcn/ui.
-- Shared workspace com tipos placeholder.
-
 ### Fase 0 — Fundação ✅
 
 - [x] Monorepo com Turborepo + pnpm workspaces
