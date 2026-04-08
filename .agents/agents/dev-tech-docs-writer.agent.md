@@ -117,7 +117,19 @@ Use `vscode/askQuestions` para:
 
 Solicitação → Pesquisa → Decisões → Estrutura → Definições → Validação → Propagação → Entrega
 
-## 📊 Qualidade
+## � Resumo no Chat
+
+Após entregar a documentação, poste um resumo breve no chat com o usuário:
+- **O que foi feito** (1-2 linhas)
+- **Arquivos alterados/criados**
+- **Links relevantes** (se houver)
+
+Exemplo:
+> ✅ Doc criada: `docs/api/useAuth.mdx` | Arquivos: 1 novo, 0 alterados | Links: nenhum
+
+Sem prosa, sem lista de tarefas concluídas — apenas o registro objetivo.
+
+## �📊 Qualidade
 
 ✓ Definições objetivas
 ✓ Tipos e contratos precisos

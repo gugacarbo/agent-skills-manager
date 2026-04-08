@@ -156,3 +156,84 @@ interface AppConfig {
 - Validação de branches e tags
 - Prevenção de overwrite acidental
 - Conflict detection pré-sincronização
+
+## Decisões de Arquitetura
+
+### Validação de Schema
+
+**Decisão**: Usar Zod para validação runtime
+
+**Racional**:
+- Type safety end-to-end (TypeScript)
+- Validação em runtime de arquivos carregados
+- Mensagens de erro claras
+- Schema como fonte de verdade
+
+### Modelo de Segurança
+
+**Decisão**: Permissivo com avisos
+
+**Racional**:
+- Flexibilidade para usuários avançados
+- Avisos claros sobre riscos
+- Usuário tem controle final
+- Balanceia segurança e usabilidade
+
+### Estratégia de Testes
+
+**Decisão**: Testes unitários para funções críticas
+
+**Escopo**:
+- Path resolver
+- Sync engine
+- Validação de schema (Zod)
+- Git operations (mock)
+
+**Excluído**: E2E tests (por enquanto)
+
+### Observabilidade
+
+**Decisão**: Logging estruturado sem telemetria
+
+**Implementação**:
+- Output channel no VS Code
+- Log levels (info, warn, error)
+- Debug mode ativável
+- Zero telemetria/analytics
+
+### Performance
+
+**Decisão**: Otimizar sem limites fixos
+
+**Abordagem**:
+- Foco em performance desde o início
+- Sem hard limits artificiais
+- Monitorar e otimizar conforme necessidade
+- Lazy loading e cache estratégico
+
+### Compatibilidade
+
+**Decisão**: Sem preocupação com compatibilidade (projeto novo)
+
+**Racional**:
+- Nada desenvolvido ainda
+- Liberdade para iterar rápido
+- Breaking changes aceitáveis na fase inicial
+
+### API Pública
+
+**Decisão**: Não expor API pública
+
+**Racional**:
+- Foco em uso direto
+- Menor superfície de manutenção
+- Extensão para consumo próprio
+
+### Distribuição
+
+**Decisão**: VS Code Marketplace
+
+**Canais**:
+- Publicação oficial no marketplace
+- Versões estáveis
+- Changelog no GitHub

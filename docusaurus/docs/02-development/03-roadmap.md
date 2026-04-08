@@ -58,9 +58,20 @@ sidebar_label: Roadmap
 **Status**: Planejado
 
 **Entregas**:
-- Multi-agent orchestration
-- Skill composition
+- Multi-agent orchestration (manual)
+- Skill testing framework (sintaxe)
+- Template library (embutida)
 - Version history viewer
 - Export/Import (backup)
 - Cloud sync (opcional)
-- Analytics de uso
+
+## Fase 5 - Inteligência e Automação 🧠
+
+**Status**: Futuro
+
+**Entregas**:
+- AI-powered conflict resolution
+- Skill composition avançada
+- Smart recommendations
+- Auto-complete de blocos
+- Pattern detection
