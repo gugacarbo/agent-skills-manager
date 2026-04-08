@@ -8,7 +8,6 @@ tools:
     vscode/installExtension,
     vscode/memory,
     vscode/newWorkspace,
-    vscode/resolveMemoryFileUri,
     vscode/runCommand,
     vscode/vscodeAPI,
     vscode/extensions,

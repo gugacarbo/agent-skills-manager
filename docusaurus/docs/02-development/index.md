@@ -1,14 +1,32 @@
 ---
-title: Especificação de Features
-sidebar_label: Features
-description: Especificação detalhada das features priorizadas
+title: Desenvolvimento
+sidebar_label: Desenvolvimento
+description: This description can be used in the swizzled DocCard
 ---
 
-# Especificação de Features
+## Especificação de Features
 
 Este documento detalha as features selecionadas para implementação, incluindo requisitos, critérios de aceite e prioridades.
 
 ---
+
+## Decisões de Planejamento
+
+Resumo das decisões tomadas na seção de planejamento (Visão Geral, Padrões, Testes, Observabilidade, Sync Flow, Configuração e Decisões de Features).
+
+- **Gerenciamento de pacotes**: usar `pnpm` workspaces para gerenciar múltiplos pacotes e compartilhar dependências.
+- **Validação de schema**: usar `zod` como fonte de verdade para validação em runtime e integração com TypeScript (schemas em `shared/types.ts`).
+- **Segurança**: modelo permissivo com avisos — validar/sanitizar paths, warn em operações perigosas e pedir confirmação para ações destrutivas.
+- **Testes**: foco em testes unitários para funções críticas (Path resolver, Sync engine, Zod, Git ops) usando `vitest`; E2E e testes de integração ficam fora do escopo inicial.
+- **Observabilidade**: logging estruturado via Output Channel do VS Code com levels (`error`, `warn`, `info`, `debug`); sem telemetria.
+- **Configuração**: suporte a config global (`~/.vscode/extensions/agent-skills-manager/config.json`) e workspace (`.vscode/agent-skills-manager.json`); `agent` default é `copilot`.
+- **Fluxo de sincronização**: debounce de 500ms para auto-sync; direção padrão `bidirectional`; suporte a `push`/`pull`/`bidirectional` por config.
+- **Detecção de conflitos**: combinação de `mtime` + SHA-256 do conteúdo + verificação de merge-base via Git para identificar conflitos.
+- **Merge automático**: suportar merges simples (arquivos diferentes, mudanças em linhas diferentes, idempotência); exigir intervenção humana para mesmas linhas, delete vs modify e conflitos semânticos.
+- **Operações Git automáticas**: auto-pull antes do sync e auto-commit + push após (com retry/backoff e tratamento de erros de rede); mensagens de commit padronizadas (`sync: Update patterns from [workspace]`).
+- **Escopo excluído inicial**: marketplace, analytics, skill composer visual e portable packages — podem ser revisitados futuramente.
+- **Prioridades e próximos passos**: implementar Fase 2 (sync + Git), definir schemas Zod, criar base de testes unitários, implementar logging estruturado, desenvolver templates (Fase 3) e suporte multi-agent (Fase 4).
+
 
 ## Fase 2 - Sincronização e Git 🔄
 
@@ -43,9 +61,9 @@ Este documento detalha as features selecionadas para implementação, incluindo 
 4. Verificar ancestral comum no Git
 
 **Critérios de Aceite**:
-- [ ] Conflitos detectados com >95% precisão
-- [ ] Falsos positivos <5%
-- [ ] Performance: <100ms para 100 arquivos
+- [ ] Conflitos detectados com > 95% precisão
+- [ ] Falsos positivos < 5%
+- [ ] Performance: < 100ms para 100 arquivos
 
 **Prioridade**: 🔴 Alta
 
@@ -114,8 +132,8 @@ git pull origin main
 - Mocks para Git e filesystem
 
 **Critérios de Aceite**:
-- [ ] Coverage total ≥80%
-- [ ] Tests executam em <30s
+- [ ] Coverage total ≥ 80%
+- [ ] Tests executam em < 30s
 - [ ] CI integra testes no pipeline
 
 **Prioridade**: 🟡 Média
@@ -260,7 +278,7 @@ const SkillSchema = z.object({
 - [ ] Validação antes de aplicar skill
 - [ ] Erros claros e acionáveis
 - [ ] Sugestões de correção
-- [ ] Performance: <50ms por validação
+- [ ] Performance: < 50ms por validação
 
 **Prioridade**: 🟡 Média
 
@@ -314,12 +332,12 @@ const SkillSchema = z.object({
 **Requisitos**:
 - Integração com LLM (Claude, GPT, etc.)
 - Contexto mínimo necessário
-- Sugestões em <5s
+- Sugestões em < 5s
 - Privacidade (não enviar código sensível)
 
 **Critérios de Aceite**:
 - [ ] Sugestões úteis em 70%+ dos casos
-- [ ] Performance: <5s por sugestão
+- [ ] Performance: < 5s por sugestão
 - [ ] Usuário pode desabilitar
 - [ ] Privacidade respeitada
 
@@ -327,101 +345,142 @@ const SkillSchema = z.object({
 
 ---
 
-## Features Não Prioritárias ❌
+## Componentes UI
 
-### Skill Marketplace
-- **Status**: Não implementar
-- **Motivo**: Complexidade alta, foco em uso individual
-- **Revisitar**: Se houver demanda da comunidade
+### Stack
 
-### Analytics Dashboard
-- **Status**: Não implementar
-- **Motivo**: Privacidade, baixo valor inicial
-- **Revisitar**: Se usuários pedirem insights
+- React 19 + TypeScript
+- Vite (build)
+- Webview VS Code
 
-### Skill Composer Visual
-- **Status**: Não implementar
-- **Motivo**: Editor de texto é suficiente
-- **Revisitar**: Como feature premium
-
-### Portable Packages
-- **Status**: Planejar para Fase 4
-- **Motivo**: Git sync já resolve
-- **Revisitar**: Se precisar de offline/backup
-
----
-
-## Matriz de Priorização
-
-| Feature                | Valor | Esforço | Risco | Prioridade |
-| ---------------------- | ----- | ------- | ----- | ---------- |
-| Sync Engine            | Alto  | Médio   | Baixo | 🔴 Alta     |
-| Git Integration        | Alto  | Médio   | Baixo | 🔴 Alta     |
-| Detecção Conflitos     | Alto  | Baixo   | Baixo | 🔴 Alta     |
-| Testes Unitários       | Médio | Baixo   | Baixo | 🟡 Média    |
-| Template Library       | Médio | Baixo   | Baixo | 🟢 Baixa    |
-| Multi-Agent            | Alto  | Médio   | Médio | 🟢 Baixa    |
-| Testing Framework      | Médio | Baixo   | Baixo | 🟡 Média    |
-| AI Conflict Resolution | Alto  | Alto    | Alto  | 🔵 Futuro   |
-
-**Legenda**:
-- 🔴 Alta: Implementar o quanto antes
-- 🟡 Média: Implementar após críticas
-- 🟢 Baixa: Nice to have
-- 🔵 Futuro: Planejar para depois
-
----
-
-## Dependências entre Features
+### Arquitetura
 
 ```mermaid
-graph TD
-    A[Sync Engine] --> B[Git Integration]
-    A --> C[Detecção Conflitos]
-    C --> D[Merge Automático]
-    B --> E[Auto-sync]
+graph TB
+    A[App.tsx] --> B[TreeView]
+    A --> C[MainPanel]
+    C --> D[SkillEditor]
+    C --> E[AgentConfig]
+    C --> F[SyncPanel]
+```
 
-    F[Testes Unitários] --> A
-    F --> B
-    F --> C
+### Componentes
 
-    G[Logging] --> A
-    G --> B
+#### App.tsx
+- Root component
+- Estado global
+- Roteamento
+- Theme provider
 
-    H[Templates] -.-> I[UI/UX]
-    J[Multi-Agent] -.-> K[Testing Framework]
+#### TreeView
+- Navegação hierárquica (skills/agents)
+- Expansão/recolhimento de nós
+- Seleção múltipla
 
-    L[AI Conflict] -.-> C
-    L -.-> D
+**Estrutura**:
+```
+📁 Skills/
+  ├── 📁 react/
+  └── 📁 python/
+📁 Agents/
+```
 
-    style A fill:#f96,stroke:#333
-    style B fill:#f96,stroke:#333
-    style C fill:#f96,stroke:#333
-    style F fill:#9c9,stroke:#333
-    style H fill:#99f,stroke:#333
-    style L fill:#fcc,stroke:#333
+**Interações**:
+- Click → Seleciona
+- Double-click → Abre editor
+- Right-click → Menu de contexto
+
+#### AgentConfig
+
+- Seletor de agent (copilot/claude)
+- Configurações globais
+- Settings do VS Code integration
+
+### VS Code API
+
+#### Message Passing
+
+```typescript
+// Webview → Extension
+vscode.postMessage({ type: 'SYNC_REQUEST', payload: { destination: 'workspace-1' } })
+
+// Extension → Webview
+window.addEventListener('message', event => {
+  const { type, payload } = event.data
+})
 ```
 
 ---
 
-## Métricas de Sucesso por Feature
+## Roadmap
 
-| Feature            | Métrica               | Meta                  |
-| ------------------ | --------------------- | --------------------- |
-| Sync Engine        | Tempo médio de sync   | <5s para 100 arquivos |
-| Detecção Conflitos | Precisão              | >95%                  |
-| Merge Automático   | Taxa de auto-resolve  | >70%                  |
-| Testes             | Coverage              | ≥80%                  |
-| Templates          | Templates disponíveis | ≥10                   |
-| Multi-Agent        | Agents suportados     | ≥2                    |
-| Logging            | Impacto performance   | <5% overhead          |
+### Fase 1 - Core Foundation ✅
 
----
+**Status**: Concluído
 
-## Próximos Passos
+**Entregas**:
+- Estrutura extensão VS Code
+- Webview (React + TypeScript)
+- Path resolver
+- TreeView
+- Configuração JSON
+- VS Code API integration
 
-1. **Revisar especificações** com stakeholders (se aplicável)
-2. **Quebrar features em tasks** menores
-3. **Estimar esforço** por task
-4. **Priorizar no backlog**
-5. **Iniciar implementação** (Fase 2 primeiro)
+### Fase 2 - Sincronização e Git 🔄
+
+**Status**: Em desenvolvimento
+
+**Entregas**:
+- Sync engine
+- Detecção de conflitos
+- Merge automático
+- Integração Git
+- File watcher (auto-sync)
+- Histórico de operações
+
+**Critérios de aceite**:
+- Sync entre 2+ workspaces
+- Detecção correta de conflitos
+- Resolução automática (conflitos simples)
+- Git commits automáticos
+- Auto-sync configurável
+
+### Fase 3 - UI/UX Avançada 📋
+
+**Status**: Planejado
+
+**Entregas**:
+- Editor visual (drag-and-drop)
+- Preview de changes
+- Diff viewer (conflitos)
+- Templates de skills
+- Search global (fuzzy matching)
+- Atalhos customizáveis
+
+**Componentes**:
+- SkillTemplatePicker
+- ConflictDiffViewer
+- GlobalSearchBar
+
+### Fase 4 - Recursos Avançados 🚀
+
+**Status**: Planejado
+
+**Entregas**:
+- Multi-agent orchestration (manual)
+- Skill testing framework (sintaxe)
+- Template library (embutida)
+- Version history viewer
+- Export/Import (backup)
+- Cloud sync (opcional)
+
+### Fase 5 - Inteligência e Automação 🧠
+
+**Status**: Futuro
+
+**Entregas**:
+- AI-powered conflict resolution
+- Skill composition avançada
+- Smart recommendations
+- Auto-complete de blocos
+- Pattern detection

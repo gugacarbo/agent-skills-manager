@@ -1,9 +1,9 @@
 ---
 title: Fluxo de Sincronização
-sidebar_label: Sincronização e Git
+sidebar_label: Sincronização
 ---
 
-# Sincronização e Git
+# Fluxo de Sincronização
 
 ## Arquitetura
 
@@ -121,9 +121,6 @@ git push origin main
 { "syncDirection": "pull" }    // Destinos → Workspace
 { "syncDirection": "bidirectional" } // Ambos
 ```
-  "syncDirection": "pull"
-}
-```
 
 ### Bidirecional (Padrão)
 
@@ -151,6 +148,8 @@ if (localHash !== remoteHash) {
   // Conflito detectado
 }
 ```
+
+### Merge Base
 
 ```bash
 git merge-base --is-ancestor commit-a commit-b
@@ -205,3 +204,8 @@ Command Palette → Agent Skills: Sync Now
 ```
 
 Executa sincronização manual imediata
+
+## Referências
+
+- [Visão Geral da Arquitetura](./01-visao-geral) - Componentes do sync engine
+- [Configuração](./07-configuracao) - Opções de sync
