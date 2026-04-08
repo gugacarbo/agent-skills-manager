@@ -83,6 +83,14 @@ interface SyncResult {
   errors: SyncError[];
 }
 
+interface SyncError {
+  code: string;
+  message: string;
+  filePath?: string;
+  category: 'network' | 'filesystem' | 'validation' | 'git' | 'other';
+  recoverable: boolean;
+}
+
 interface SyncOperation {
   type: 'copy' | 'merge' | 'delete' | 'rename';
   source: string;
@@ -257,6 +265,78 @@ O usuário deve fazer `git pull` manualmente para:
 - Evitar sobrescrever work in progress
 - Prevenir conflitos inesperados
 - Comportamento previsível
+
+## Taxonomia de Erros
+
+### Categorias de SyncError
+
+O sistema classifica erros em categorias para determinar tratamento apropriado:
+
+```typescript
+interface SyncError {
+  code: string;           // Código único do erro (ex: 'EACCES', 'NETWORK_TIMEOUT')
+  message: string;        // Mensagem legível para o usuário
+  filePath?: string;      // Path do arquivo que causou erro (se aplicável)
+  category: 'network' | 'filesystem' | 'validation' | 'git' | 'other';
+  recoverable: boolean;   // Se retry automático é possível
+}
+```
+
+### Erros Retryable (recoverable: true)
+
+Erros que podem ser resolvidos com retry automático:
+
+| Category | Código | Descrição | Ação |
+|----------|--------|-----------|------|
+| `network` | `ETIMEDOUT`, `ECONNRESET` | Erros de rede temporários | Retry com backoff |
+| `network` | `ENOTFOUND` | DNS temporariamente indisponível | Retry com backoff |
+| `filesystem` | `EBUSY` | Arquivo em uso | Retry após delay |
+| `filesystem` | `EAGAIN` | Recurso temporariamente indisponível | Retry com backoff |
+| `git` | `LOCK_EXISTS` | `.git/index.lock` existe | Retry após delay |
+
+### Erros Non-Retryable (recoverable: false)
+
+Erros que requerem intervenção do usuário:
+
+| Category | Código | Descrição | Notificação |
+|----------|--------|-----------|-------------|
+| `filesystem` | `EACCES` | Permissão negada | Toast crítico |
+| `filesystem` | `ENOENT` | Arquivo não encontrado | Toast crítico |
+| `filesystem` | `ENOSPC` | Disco cheio | Toast crítico |
+| `validation` | `INVALID_CONFIG` | Configuração inválida | Toast crítico |
+| `validation` | `INVALID_PATH` | Path inválido | Log apenas |
+| `git` | `MERGE_CONFLICT` | Conflito de merge | Toast crítico |
+
+### Estratégia de Notificação
+
+- **Toast (crítico)**: Erros non-retryable que impedem operação
+- **Log apenas**: Erros de validação que são esperados ou informativos
+- **Silent retry**: Erros retryable são tratados silenciosamente até falha final
+
+```typescript
+function handleSyncError(error: SyncError): void {
+  if (error.recoverable) {
+    // Log e retry automático
+    logger.warn(`Erro recuperável: ${error.message}`, error);
+    // Retry logic handled by RetryManager
+  } else {
+    // Notifica usuário conforme categoria
+    if (shouldShowToast(error)) {
+      vscode.window.showErrorMessage(`Sync falhou: ${error.message}`);
+    } else {
+      logger.error(error.message, error);
+    }
+  }
+}
+
+function shouldShowToast(error: SyncError): boolean {
+  // Toast apenas para erros críticos
+  return error.category === 'filesystem' && 
+         ['EACCES', 'ENOENT', 'ENOSPC'].includes(error.code) ||
+         error.category === 'validation' && error.code === 'INVALID_CONFIG' ||
+         error.category === 'git' && error.code === 'MERGE_CONFLICT';
+}
+```
 
 ## Histórico e Auditoria
 

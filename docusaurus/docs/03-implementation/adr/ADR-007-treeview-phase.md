@@ -46,3 +46,39 @@ TreeView fornece:
 - [ ] Implementar navegação hierárquica
 - [ ] Atualizar critérios de aceite da Fase 1
 - [ ] Preparar slots para status indicators (Fase 2)
+
+## Status Indicators (Fase 2+)
+
+Embora implementado na Fase 1, o TreeView deve incluir slots para status indicators que serão populados nas fases futuras:
+
+### Custom Badges e Categorias
+
+**Visualização**: Ícones ao lado do nome do arquivo
+**Tipos de badges suportados**:
+- Categoria/Tag do skill (ex: "ai", "web", "database")
+- Status de sincronização (Fase 2)
+- Conflitos pendentes (Fase 2)
+- Validação/Linting (Fase 4)
+
+**Implementação**:
+```typescript
+interface TreeItemBadge {
+  type: 'category' | 'sync' | 'conflict' | 'validation';
+  icon: string;  // VS Code icon name ou emoji
+  tooltip: string;
+  color?: string;
+}
+
+interface SkillTreeItem extends vscode.TreeItem {
+  badges: TreeItemBadge[];
+}
+```
+
+### Atualização Automática
+
+**TREE_REFRESH** é enviado automaticamente:
+- Via file watcher quando qualquer arquivo muda
+- Com debounce de 500ms (configurável)
+- Para toda mudança, não apenas `.agents/`
+
+**Mensagem de protocolo**: Usar `TREE_REFRESH` existente (não requer novo tipo)

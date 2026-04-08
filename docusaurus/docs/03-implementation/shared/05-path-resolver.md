@@ -23,21 +23,30 @@ O **Path Resolver** é um módulo utilitário responsável por normalizar, resol
 class PathResolver {
   /**
    * Normaliza um path removendo redundâncias e resolvendo '..' e '.'
+   * @param path - Path a ser normalizado
+   * @returns Path normalizado
    */
   normalize(path: string): string;
 
   /**
    * Resolve um path relativo para absoluto
-   * @param path - Path relativo ou absoluto
-   * @param baseDir - Diretório base (opcional, usa CWD se omitido)
+   * Usa path.resolve do Node.js internamente e adiciona validação
+   * para prevenir path traversal attacks
+   * 
+   * @param relativePath - Path relativo ou absoluto
+   * @param base - Diretório base (opcional, usa CWD se omitido)
+   * @returns Path absoluto resolvido
    */
-  resolve(path: string, baseDir?: string): string;
+  resolve(relativePath: string, base?: string): string;
 
   /**
-   * Valida se um path existe no sistema de arquivos
-   * @returns true se o path existe
+   * Valida se um path é seguro e existe
+   * Combina validação de segurança com verificação de existência
+   * 
+   * @param path - Path a ser validado
+   * @returns true se path é válido e existe
    */
-  exists(path: string): boolean;
+  validate(path: string): boolean;
 
   /**
    * Transforma path entre workspaces
@@ -55,7 +64,7 @@ class PathResolver {
    * Valida permissões de acesso ao path
    * @returns { valid: boolean, warnings: string[] }
    */
-  validate(path: string): PathValidationResult;
+  validatePermissions(path: string): PathValidationResult;
 }
 
 interface PathValidationResult {
@@ -64,6 +73,60 @@ interface PathValidationResult {
   sanitized: string;
 }
 ```
+
+### Comportamento Detalhado
+
+#### `resolve(relativePath, base?)`
+
+Resolve symlinks para o path real utilizando:
+1. `path.resolve()` do Node.js para resolução básica
+2. `fs.realpathSync()` para seguir symlinks
+3. Validação adicional para prevenir path traversal
+
+```typescript
+resolve(relativePath: string, base?: string): string {
+  // 1. Resolve path usando Node.js path.resolve
+  const resolved = path.resolve(base || process.cwd(), relativePath);
+  
+  // 2. Segue symlinks para obter path real
+  const realPath = fs.realpathSync(resolved);
+  
+  // 3. Valida que não houve traversal malicioso
+  if (!this.isPathSafe(realPath, base)) {
+    throw new Error('Path traversal detectado');
+  }
+  
+  return realPath;
+}
+```
+
+#### Prevenção de Path Traversal
+
+O PathResolver implementa múltiplas camadas de proteção contra ataques de path traversal:
+
+**1. Sanitização Básica**
+- Remove componentes `..` de paths relativos
+- Valida prefixo do workspace para paths resolvidos
+- Rejeita paths com null bytes ou caracteres perigosos
+
+**2. Validação de Workspace**
+```typescript
+private isPathSafe(resolvedPath: string, base?: string): boolean {
+  const workspaceRoot = base || process.cwd();
+  // Path resolvido DEVE estar dentro do workspace
+  return resolvedPath.startsWith(workspaceRoot);
+}
+```
+
+**3. Exemplos de Paths**
+
+| Path de Entrada | Resultado | Razão |
+|----------------|-----------|-------|
+| `./skill.ts` | ✅ Válido | Path relativo seguro |
+| `../../../etc/passwd` | ❌ Inválido | Path traversal detectado |
+| `~/.agents/skill.ts` | ✅ Válido (com warning) | Path absoluto global permitido |
+| `/tmp/\0malicious` | ❌ Inválido | Null byte detectado |
+| `.agents/sub/../skill.ts` | ✅ Válido | Normalizado para `.agents/skill.ts` |
 
 ## Comportamento
 

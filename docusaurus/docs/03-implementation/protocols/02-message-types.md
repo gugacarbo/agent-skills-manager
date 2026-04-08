@@ -105,21 +105,26 @@ Notifica mudanças na configuração da aplicação.
 
 #### `SYNC_COMPLETE`
 
-Confirma sucesso de operação de sincronização.
+Confirma conclusão de operação de sincronização.
 
 ```typescript
 {
   type: 'SYNC_COMPLETE';
   payload: {
-    status: 'success';
+    status: 'success' | 'partial' | 'warning';
     syncedFiles: number; // Quantidade de arquivos sincronizados
   }
 }
 ```
 
-**Uso**: Após `SYNC_PATTERN` concluir com sucesso.
+**Status Values**:
+- `'success'`: Todos os arquivos foram sincronizados sem problemas
+- `'partial'`: Alguns arquivos foram sincronizados, mas outros falharam
+- `'warning'`: Sincronização completa, mas com avisos (ex: arquivos ignorados, permissões alteradas)
 
-**UI Impact**: Mostra notificação de sucesso, atualiza contadores.
+**Uso**: Após `SYNC_PATTERN` concluir (com ou sem problemas).
+
+**UI Impact**: Mostra notificação apropriada baseada no status, atualiza contadores.
 
 ---
 
@@ -158,18 +163,24 @@ Solicita refresh da árvore de skills na UI.
 
 ### `AppConfig`
 
-⚠️ **A definir em `shared/src/types.ts`**
-
 Configuração da aplicação compartilhada entre extension e webview.
 
 ```typescript
 interface AppConfig {
-  // A ser definido conforme necessidades da aplicação
-  skillsPath?: string;
+  configVersion: string;  // Schema version for compatibility
   autoSync?: boolean;
-  // ...
+  autoCommit?: boolean;
+  autoApproveDeletes?: boolean;
+  retryAttempts?: number;
+  retryDelayMs?: number;
 }
 ```
+
+**Localização de Armazenamento**: 
+- A configuração é armazenada em `.vscode/agent-skills.json` no workspace (conforme [ADR-001](../adr/ADR-001-precedencia-configuracao.md))
+- Ordem de precedência: workspace file > VS Code Settings > globalState > defaults
+
+**Nota**: Não existe mais arquivo `agents.json` - toda configuração usa `.vscode/agent-skills.json`
 
 ## Capabilities
 
@@ -177,20 +188,64 @@ Sistema de descoberta de funcionalidades em runtime.
 
 ### Capabilities Conhecidas
 
+Lista estática de capabilities disponíveis:
+
 | Capability | Descrição |
 |------------|-----------|
 | `sync` | Sincronização de patterns |
 | `tree` | Navegação em árvore de skills |
 | `config` | Gerenciamento de configuração |
 
+### Versionamento
+
+Capabilities suportam versionamento usando o formato `capability@version`:
+
+```typescript
+// Exemplos
+capabilities: [
+  'sync@2.0',
+  'tree@1.0',
+  'config@1.5'
+]
+```
+
+### Registro
+
+As capabilities são registradas e gerenciadas em `shared/src/capabilities.ts`. Este arquivo centraliza:
+- Lista de capabilities disponíveis
+- Versões de cada capability
+- Validação de capabilities suportadas
+- Helpers para verificação de compatibilidade
+
+```typescript
+// shared/src/capabilities.ts (exemplo planejado)
+export const CAPABILITIES = {
+  SYNC: 'sync',
+  TREE: 'tree',
+  CONFIG: 'config'
+} as const;
+
+export function parseCapability(capability: string): { name: string; version?: string } {
+  const [name, version] = capability.split('@');
+  return { name, version };
+}
+```
+
 ### Uso
 
 Webview verifica `capabilities` no `STATUS_UPDATE` para habilitar/desabilitar features:
 
 ```typescript
-const hasSync = capabilities.includes('sync');
+const hasSync = capabilities.some(cap => cap.startsWith('sync'));
 if (hasSync) {
   // Habilita botão "Sync Pattern"
+}
+
+// Com versionamento
+const syncCap = capabilities.find(cap => cap.startsWith('sync@'));
+const { version } = parseCapability(syncCap);
+if (version && version >= '2.0') {
+  // Usa features da versão 2.0+
 }
 ```
 

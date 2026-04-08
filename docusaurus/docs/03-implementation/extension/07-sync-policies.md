@@ -164,12 +164,100 @@ class RetryManager {
 - ❌ Permission errors (erro permanente)
 - ❌ Invalid syntax errors (erro permanente)
 
+### Retry Cancellation
+
+**Botão "Cancel" na notificação de retry**
+
+Durante o processo de retry, o usuário pode cancelar a operação:
+
+```typescript
+/**
+ * Mostra progresso durante retry com opção de cancelamento
+ */
+private showRetryProgress(operation: string, attempt: number): CancellationTokenSource {
+  const cancellationTokenSource = new vscode.CancellationTokenSource();
+  
+  vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Notification,
+      title: `Retrying ${operation}`,
+      cancellable: true
+    },
+    async (progress, token) => {
+      progress.report({
+        message: `Attempt ${attempt} of ${this.config.maxRetries}...`
+      });
+      
+      // Propaga cancelamento
+      token.onCancellationRequested(() => {
+        cancellationTokenSource.cancel();
+      });
+    }
+  );
+  
+  return cancellationTokenSource;
+}
+
+/**
+ * Executa operação com retry e suporte a cancelamento
+ */
+async executeWithRetry<T>(
+  operation: () => Promise<T>,
+  operationName: string
+): Promise<T> {
+  let lastError: Error;
+  let cancellationToken: CancellationTokenSource | null = null;
+
+  for (let attempt = 0; attempt <= this.config.maxRetries; attempt++) {
+    try {
+      // Mostra progresso se não é primeira tentativa
+      if (attempt > 0) {
+        cancellationToken = this.showRetryProgress(operationName, attempt);
+      }
+
+      // Verifica se foi cancelado
+      if (cancellationToken?.token.isCancellationRequested) {
+        throw new Error(`${operationName} cancelled by user`);
+      }
+
+      return await operation();
+    } catch (error) {
+      lastError = error;
+
+      // Classifica o erro
+      if (!this.isRetryable(error)) {
+        throw error; // Erro permanente, não tenta novamente
+      }
+
+      // Última tentativa falhou
+      if (attempt === this.config.maxRetries) {
+        throw this.createRetryExhaustedError(operationName, lastError);
+      }
+
+      // Calcula delay e aguarda
+      const delay = this.calculateDelay(attempt);
+      await this.sleep(delay);
+    } finally {
+      cancellationToken?.dispose();
+    }
+  }
+
+  throw lastError!;
+}
+```
+
+**Comportamento do Cancel**:
+- ❌ Aborta operação de retry
+- ✅ Mantém estado anterior (não aplica mudanças parciais)
+- 📝 Registra cancelamento nos logs
+- 🔔 Notifica usuário que operação foi cancelada
+
 ### Exemplo de Uso
 
 ```typescript
 const retryManager = new RetryManager();
 
-// Git push com retry
+// Git push com retry e cancelamento
 await retryManager.executeWithRetry(
   async () => {
     await git.push();
@@ -177,7 +265,7 @@ await retryManager.executeWithRetry(
   'Git Push'
 );
 
-// Sync com retry
+// Sync com retry e cancelamento
 await retryManager.executeWithRetry(
   async () => {
     await syncEngine.sync();
@@ -216,6 +304,8 @@ Garantir que o usuário tenha controle total sobre o workflow Git, sem surpresas
 ### Estratégia
 
 **Nunca fazer auto-pull. Usuário deve fazer pull manualmente.**
+
+⚠️ **IMPORTANTE**: Git pull é sempre manual. Não existe configuração `gitPullTiming` ou similar. Para fazer pull, use o comando `skills.gitPull` no Command Palette (ver [Commands](./02-commands.md)).
 
 ### Rationale
 
@@ -286,7 +376,7 @@ class GitManager {
 
 ### Warning para Repositório Desatualizado
 
-Opcionalmente, pode-se avisar o usuário se repositório está desatualizado:
+⚠️ **Recomendado**: Avisar o usuário quando repositório está desatualizado.
 
 ```typescript
 async function checkRepositoryStatus(): Promise<void> {
@@ -301,11 +391,14 @@ async function checkRepositoryStatus(): Promise<void> {
     );
 
     if (action === 'Pull Now') {
-      await git.pull();
+      // Executa comando skills.gitPull
+      await vscode.commands.executeCommand('skills.gitPull');
     }
   }
 }
 ```
+
+**Uso Sugerido**: Use o comando `skills.gitPull` (ver [Commands](./02-commands.md)) para sincronizar manualmente com o repositório remoto.
 
 ### Exemplo de Workflow
 
@@ -338,9 +431,11 @@ Máxima segurança contra perda de dados acidental em operações destrutivas.
 
 ### Estratégia
 
-**Sempre perguntar ao usuário, sem opção de auto-aprovação.**
+**Sempre perguntar como comportamento padrão, com opção configurável de auto-aprovação.**
 
 ### Comportamento
+
+#### Modo Padrão (`autoApproveDeletes: false`)
 
 Para toda operação destrutiva (delete ou rename):
 
@@ -349,7 +444,15 @@ Para toda operação destrutiva (delete ou rename):
 3. **Aguarda** confirmação explícita do usuário
 4. **Executa** apenas após aprovação
 
-**Importante**: Não existe configuração `autoApproveDeletes`. Confirmação é sempre obrigatória.
+#### Modo Auto-Aprovação (`autoApproveDeletes: true`)
+
+Quando configurado ([ADR-003](../adr/ADR-003-sync-strategy.md)):
+
+1. **Detecta** operação destrutiva
+2. **Registra** nos logs
+3. **Executa** automaticamente sem confirmação
+
+**Recomendação**: Manter `autoApproveDeletes=false` (padrão) para máxima segurança contra perda de dados acidental.
 
 ### Implementação Prevista
 

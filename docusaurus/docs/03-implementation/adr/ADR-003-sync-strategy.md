@@ -49,6 +49,20 @@ Sync Engine precisa detectar mudanças, resolver conflitos e sincronizar arquivo
 - Pode requerer intervenção manual frequente em cenários colaborativos
 - Complexidade de implementação do merge engine
 
+## Configuração
+
+### autoApproveDeletes
+
+**Tipo**: `boolean`  
+**Padrão**: `false`  
+**Descrição**: Quando `true`, permite pular confirmação manual de operações destrutivas (delete/rename).
+
+**Comportamento**:
+- `autoApproveDeletes: false` (padrão): Sempre pergunta ao usuário antes de delete/rename (ver [ADR-011](./ADR-011-delete-rename-policy.md))
+- `autoApproveDeletes: true`: Executa operações destrutivas automaticamente sem confirmação
+
+**Nota sobre Git Pull**: Git pull é **sempre manual** (nunca automático). Ver [ADR-009: Git Pull Policy](./ADR-009-git-pull-policy.md) para detalhes.
+
 ## Implementação
 
 - [ ] Implementar comparação por hash SHA-256
@@ -57,3 +71,4 @@ Sync Engine precisa detectar mudanças, resolver conflitos e sincronizar arquivo
 - [ ] Implementar UI para resolução manual
 - [ ] Implementar histórico de operações
 - [ ] Adicionar testes de cenários de conflito
+- [ ] Implementar configuração `autoApproveDeletes`

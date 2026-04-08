@@ -64,6 +64,8 @@ sequenceDiagram
 
 ### Atualização de Configuração
 
+**Mecanismo Normal (Push)**:
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -75,8 +77,30 @@ sequenceDiagram
     VS->>E: onDidChangeConfiguration
     Note over E: Processa mudança
     E->>W: CONFIG_UPDATE<br/>{config: {...}}
-    Note over W: Atualiza UI
+    Note over W: Atualiza cache local<br/>Atualiza UI
 ```
+
+**Mecanismo de Recovery (Pull)**:
+
+Se webview perder sync ou suspeitar que configuração está desatualizada:
+
+```mermaid
+sequenceDiagram
+    participant W as Webview
+    participant E as Extension
+
+    Note over W: Detecta inconsistência<br/>ou timeout
+    W->>E: GET_STATUS
+    E->>W: STATUS_UPDATE<br/>{capabilities: [...]}
+    E->>W: CONFIG_UPDATE<br/>{config: {...}}
+    Note over W: Force refresh<br/>Atualiza cache local
+```
+
+**Cache Local Otimista**:
+- Webview mantém cache local da configuração
+- Atualiza imediatamente ao receber `CONFIG_UPDATE`
+- Em caso de dúvida, força refresh via `GET_STATUS`
+- Extension é sempre a source of truth
 
 ### Refresh de Árvore (File Watcher)
 
@@ -124,7 +148,29 @@ Extension: TREE_REFRESH (se necessário)
 
 ## Error Handling
 
-### Mensagem Malformada
+### Unknown Message Type
+
+Quando a extension recebe uma mensagem com tipo desconhecido:
+
+```mermaid
+sequenceDiagram
+    participant W as Webview
+    participant E as Extension
+
+    W->>E: {type: "UNKNOWN"}
+    Note over E: Tipo desconhecido
+    E->>W: ERROR<br/>{error: "Unknown message type: UNKNOWN"}
+    Note over E: Log console warning<br/>Log VS Code Output Channel
+```
+
+**Comportamento**:
+- Extension responde com mensagem `ERROR` (tipo a ser adicionado ao protocolo)
+- Logging duplo:
+  - Console warning para debug durante desenvolvimento
+  - VS Code Output Channel para diagnóstico em produção
+- Sem rate limiting: cada mensagem desconhecida gera erro individual
+
+**Mensagem Malformada**
 
 ```mermaid
 sequenceDiagram
@@ -200,23 +246,181 @@ sequenceDiagram
 6. [Webview] Re-renderiza árvore com nova skill
 ```
 
+## Concurrent Request Handling
+
+Sistema de gerenciamento de requisições concorrentes para evitar race conditions.
+
+### Regras de Concorrência
+
+**Requests do Mesmo Tipo**:
+- Apenas uma operação do mesmo tipo pode processar por vez
+- Requests duplicados são rejeitados com erro:
+  ```typescript
+  {
+    type: 'SYNC_ERROR',
+    payload: { error: 'Operation in progress' }
+  }
+  ```
+- Exemplos:
+  - `SYNC_PATTERN` enquanto outro `SYNC_PATTERN` está processando → rejeitado
+  - `GET_STATUS` enquanto outro `GET_STATUS` está processando → rejeitado
+
+**Requests de Tipos Diferentes**:
+- Podem processar em paralelo sem restrições
+- Exemplos permitidos simultaneamente:
+  - `SYNC_PATTERN` + `GET_STATUS`
+  - `SYNC_PATTERN` + receber `CONFIG_UPDATE`
+
+### FIFO Queue
+
+Requests do mesmo tipo são enfileirados:
+- Primeira request é processada imediatamente
+- Demais requests do mesmo tipo são enfileiradas (FIFO)
+- Quando request completa, próxima na fila é processada
+- Queue é mantida por tipo de mensagem
+
+**Exemplo de Fluxo**:
+```
+T0: SYNC_PATTERN #1 → processing
+T1: SYNC_PATTERN #2 → queued
+T2: GET_STATUS → processing (tipo diferente, permitido)
+T3: SYNC_PATTERN #3 → queued
+T4: SYNC_PATTERN #1 completa → SYNC_PATTERN #2 inicia
+T5: SYNC_PATTERN #2 completa → SYNC_PATTERN #3 inicia
+```
+
 ## Timing e Performance
 
-### Timeouts
+### Request Timeouts
 
-⚠️ **Não definido**: Sistema de timeouts para operações longas.
+Sistema de timeouts definido por categoria de operação:
 
-Considerações futuras:
-- Operações > 5s devem mostrar progress
-- Timeout de 30s para operações síncronas
-- Mensagens de progresso para operações longas
+| Categoria | Timeout | Exemplos |
+|-----------|---------|----------|
+| **Operações rápidas** | 5 segundos | GET_STATUS, validações simples |
+| **Operações médias** | 30 segundos | CONFIG_UPDATE, TREE_REFRESH |
+| **Operações longas** | 2 minutos | SYNC_PATTERN (sincronização completa) |
+
+#### Comportamento de Retry
+
+- **Tentativas automáticas**: 2 tentativas após falha inicial
+- **Backoff**: Exponencial entre tentativas (2s, 4s)
+- **Total de tentativas**: 3 (inicial + 2 retries)
+- **Timeout final**: Após 3 tentativas falhadas
+
+#### Indicadores Visuais
+
+Durante operações em andamento:
+- **Spinner genérico** é exibido durante qualquer operação
+- Não há mensagens de progresso específicas por padrão
+- Operações > 5s devem mostrar indicador de carregamento
+- Timeout expirado mostra mensagem de erro genérica
+
+```typescript
+// Exemplo de implementação
+async function sendRequestWithTimeout<T>(
+  message: ExtensionMessage,
+  timeoutMs: number,
+  retries: number = 2
+): Promise<T> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await Promise.race([
+        sendMessage(message),
+        timeout(timeoutMs)
+      ]);
+    } catch (error) {
+      if (attempt === retries) throw error;
+      await sleep(Math.pow(2, attempt) * 2000); // 2s, 4s
+    }
+  }
+}
+```
 
 ### Debouncing
 
-Para evitar flood de mensagens:
+Sistema de debouncing para evitar flood de mensagens durante mudanças rápidas:
 
-- **TREE_REFRESH**: Debounce de 500ms (múltiplas mudanças de arquivo)
-- **CONFIG_UPDATE**: Debounce de 200ms (múltiplas settings)
+#### Configuração de Debounce
+
+| Tipo de Mensagem | Debounce Padrão | Configurável | Implementado Por |
+|------------------|-----------------|--------------|------------------|
+| TREE_REFRESH | 500ms | Sim (setting) | Extension |
+| CONFIG_UPDATE | 200ms | Não | Extension |
+
+#### Comportamento - Debounce Global
+
+O debouncing é **global** para todas as mudanças:
+- Todas as mudanças de arquivo compartilham a mesma janela de 500ms
+- Múltiplas mudanças dentro da janela são agregadas em um único `TREE_REFRESH`
+- Timer é resetado a cada nova mudança detectada
+
+```typescript
+class DebounceManager {
+  private debounceTimer: NodeJS.Timeout | null = null;
+  private pendingChanges: string[] = [];
+  private readonly debounceMs: number;
+
+  constructor(debounceMs: number = 500) {
+    this.debounceMs = debounceMs;
+  }
+
+  onFileChange(filePath: string): void {
+    // Adiciona mudança à lista pendente
+    this.pendingChanges.push(filePath);
+
+    // Cancela timer anterior
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+
+    // Inicia novo timer
+    this.debounceTimer = setTimeout(() => {
+      this.flush();
+    }, this.debounceMs);
+  }
+
+  private flush(): void {
+    if (this.pendingChanges.length === 0) return;
+
+    // Envia única mensagem TREE_REFRESH
+    // (não envia lista de arquivos, apenas trigger genérico)
+    sendMessage({ type: 'TREE_REFRESH' });
+
+    // Limpa pendências
+    this.pendingChanges = [];
+    this.debounceTimer = null;
+  }
+}
+```
+
+#### Mensagens Coalesced (Agregadas)
+
+Múltiplas mudanças dentro da janela de debounce são **coalesced** em uma única mensagem:
+
+**Exemplo**: Usuário salva 5 arquivos em 300ms
+```
+T0ms:   skill1.ts modificado → inicia timer de 500ms
+T100ms: skill2.ts modificado → reseta timer para 500ms
+T200ms: skill3.ts modificado → reseta timer para 500ms
+T300ms: skill4.ts modificado → reseta timer para 500ms
+T400ms: skill5.ts modificado → reseta timer para 500ms
+T900ms: Timer expira → envia 1 único TREE_REFRESH
+```
+
+**Sem debounce, seriam 5 mensagens separadas** → Com debounce, apenas 1 mensagem.
+
+#### Configuração via Settings
+
+```json
+{
+  "agent-skills.debounceMs": 500
+}
+```
+
+- **Padrão**: 500ms
+- **Mínimo**: 100ms
+- **Máximo**: 5000ms (5s)
 
 ### Batching
 

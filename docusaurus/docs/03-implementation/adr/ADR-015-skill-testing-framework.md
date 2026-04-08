@@ -37,11 +37,34 @@ Camadas de validação:
 
 Sem sandbox execution (muito complexo, risco de segurança).
 
-Regras de linting exemplo:
-- Skill name deve ser kebab-case
-- Description é obrigatória
-- Triggers devem ser únicos
-- Sem código executável em descriptions
+### Regras de Linting Iniciais
+
+Lista completa de regras de linting a serem implementadas na versão inicial:
+
+1. **Skill name deve ser kebab-case**
+   - Formato: `my-skill-name`
+   - Proibido: `MySkillName`, `my_skill_name`, `mySkillName`
+   - Severidade: Warning
+   
+2. **Description é obrigatória**
+   - Todo skill deve ter description não-vazia
+   - Severidade: Error
+
+### Configurabilidade
+
+- **Por workspace**: Regras podem ser customizadas via `.vscode/settings.json`
+- **Severidade ajustável**: Cada regra pode ser `error`, `warning`, ou `off`
+- **Warnings não bloqueiam sync**: Apenas logs, usuário pode prosseguir
+
+Exemplo de configuração:
+
+```json
+{
+  "skills.linting.rules": {
+    "kebab-case-name": "warning",
+    "required-description": "error"
+  }
+}
 
 ## Consequências
 

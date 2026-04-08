@@ -24,15 +24,24 @@ Sync Engine precisa sincronizar deleções e renomeações de skills. Operaçõe
 
 ## Decisão
 
-**Sempre perguntar, sem opção de auto-aprovação.**
+**Sempre perguntar como comportamento padrão, com opção configurável de auto-aprovação.**
 
-Comportamento para delete/rename:
+### Comportamento Padrão (`autoApproveDeletes: false`)
+
 1. Detectar operação destrutiva
 2. Mostrar preview detalhado
 3. Perguntar confirmação ao usuário
 4. Executar apenas após confirmação explícita
 
-Sem opção `autoApproveDeletes` (removida do escopo).
+### Comportamento com Auto-Aprovação (`autoApproveDeletes: true`)
+
+Quando `autoApproveDeletes=true` está configurado ([ADR-003](./ADR-003-sync-strategy.md)):
+- Operações destrutivas (delete/rename) são executadas automaticamente
+- Preview ainda é mostrado nos logs
+- Nenhuma confirmação manual é necessária
+- Útil para workflows automatizados
+
+**Recomendação**: Manter `autoApproveDeletes=false` (padrão) para máxima segurança.
 
 ## Consequências
 
@@ -48,9 +57,47 @@ Sem opção `autoApproveDeletes` (removida do escopo).
 
 ## Implementação
 
+### Preview de Batch Operations
+
+Para operações em lote (múltiplos deletes/renames), a UX deve ser:
+
+**Preview Consolidado**:
+- Mostrar apenas contagem total: "50 files will be deleted"
+- Não mostrar lista completa de arquivos (evita UI poluída)
+- Opcionalmente: Top 5 arquivos + contagem restante
+
+**Confirmação Única**:
+- Usuário confirma toda a operação batch com 1 clique
+- Não confirmar item por item (evita fadiga de cliques)
+- Checkbox "Don't ask again for this batch" disponível
+
+**Exemplo de UI**:
+```
+┌─────────────────────────────────────────┐
+│ Batch Delete Operation                  │
+├─────────────────────────────────────────┤
+│ 50 files will be deleted                │
+│                                          │
+│ ☐ Don't ask again for this batch        │
+│                                          │
+│ [Cancel]  [Confirm Delete]               │
+└─────────────────────────────────────────┘
+```
+
+**Comportamento de "Don't ask again"**:
+- Aplica apenas para operações restantes do batch atual
+- Não persiste para futuras sessões
+- Usuário ainda vê summary no log
+
 - [ ] Implementar detecção de delete/rename
 - [ ] Criar UI de preview com detalhes
+- [ ] Implementar preview consolidado para batch operations
+- [ ] Implementar checkbox "Don't ask again for this batch"
 - [ ] Implementar confirmação explícita
-- [ ] Remover `autoApproveDeletes` da documentação
+- [ ] Implementar suporte a `autoApproveDeletes` configurável
 - [ ] Adicionar logs de operações destrutivas
 - [ ] Documentar comportamento claramente
+
+## Referências Cruzadas
+
+- [ADR-003: Sync Strategy](./ADR-003-sync-strategy.md) - Define a configuração `autoApproveDeletes`

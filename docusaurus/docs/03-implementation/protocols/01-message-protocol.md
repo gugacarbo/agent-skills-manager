@@ -60,15 +60,123 @@ Mensagens enviadas pela webview para solicitar operações:
 - Payloads devem ser serializáveis (sem funções, símbolos, etc.)
 - Strings, números, objetos e arrays simples são suportados
 
+### Limites de Payload
+
+Para prevenir problemas de performance e memória, cada tipo de mensagem possui limites de tamanho:
+
+| Tipo de Mensagem | Limite de Payload | Justificativa |
+|------------------|-------------------|---------------|
+| `SYNC_PATTERN` | 10 MB | Pode incluir conteúdo de arquivos grandes |
+| `CONFIG_UPDATE` | 1 MB | Configurações normalmente pequenas |
+| `STATUS_UPDATE` | 100 KB | Lista de capabilities |
+| `TREE_REFRESH` | N/A | Sem payload |
+| `GET_STATUS` | N/A | Sem payload |
+| `SYNC_COMPLETE` | 500 KB | Pode incluir lista de arquivos |
+| `SYNC_ERROR` | 100 KB | Mensagens de erro e stack traces |
+
+**Comportamento ao Exceder Limite**:
+- Mensagem é rejeitada antes do processamento
+- Extension/Webview envia `SYNC_ERROR` com código `PAYLOAD_TOO_LARGE`
+- Log de warning inclui tamanho recebido e limite permitido
+
+```typescript
+if (payloadSize > MESSAGE_LIMITS[message.type]) {
+  postMessage({
+    type: 'SYNC_ERROR',
+    payload: {
+      error: `Payload too large: ${payloadSize} bytes (limit: ${MESSAGE_LIMITS[message.type]} bytes)`
+    }
+  });
+  return;
+}
+
 ### Type Safety
 
 - União discriminada permite narrowing automático
 - TypeScript detecta mensagens não tratadas em compilação
 - Refatoração segura (renomear tipo afeta ambos os lados)
 
+### Message Validation
+
+Todas as mensagens são validadas para garantir integridade e segurança:
+
+#### Validação Obrigatória com Zod
+
+- **Todas** as mensagens DEVEM ser validadas contra schema Zod antes de processamento
+- Validação ocorre no receptor (extension ou webview)
+- Schemas são definidos em `shared/src/schemas.ts` usando Zod
+
+#### Rejeição de Mensagens Inválidas
+
+Mensagens que falham na validação são rejeitadas:
+
+```typescript
+// Exemplo de validação
+const result = messageSchema.safeParse(message);
+
+if (!result.success) {
+  // Mensagem inválida - enviar erro de volta
+  postMessage({
+    type: 'SYNC_ERROR',
+    payload: {
+      error: `Invalid message format: ${result.error.message}`
+    }
+  });
+  return; // Não processar mensagem
+}
+
+// Mensagem válida - prosseguir
+handleMessage(result.data);
+```
+
+#### Schema Definitions
+
+Exemplo de schemas para mensagens:
+
+```typescript
+import { z } from 'zod';
+
+// Schema para GET_STATUS (sem payload)
+const GetStatusSchema = z.object({
+  type: z.literal('GET_STATUS')
+});
+
+// Schema para SYNC_PATTERN (com payload)
+const SyncPatternSchema = z.object({
+  type: z.literal('SYNC_PATTERN'),
+  payload: z.object({
+    destination: z.string().min(1)
+  })
+});
+
+// Schema para STATUS_UPDATE
+const StatusUpdateSchema = z.object({
+  type: z.literal('STATUS_UPDATE'),
+  payload: z.object({
+    capabilities: z.array(z.string())
+  })
+});
+
+// União discriminada de todos os schemas
+const ExtensionMessageSchema = z.discriminatedUnion('type', [
+  GetStatusSchema,
+  StatusUpdateSchema,
+  SyncPatternSchema,
+  // ... outros schemas
+]);
+```
+
+#### Benefícios da Validação
+
+- **Segurança**: Previne processamento de dados malformados ou maliciosos
+- **Consistência**: Garante que mensagens seguem o contrato definido
+- **Debug**: Erros de validação fornecem mensagens claras sobre o problema
+- **Runtime Safety**: Complementa type safety do TypeScript em runtime
+
 ### Error Handling
 
-- Mensagens malformadas são descartadas
+- Mensagens malformadas são rejeitadas com `*_ERROR` response
+- Mensagens que falham na validação Zod retornam erro específico
 - Erros de operação retornam mensagens `*_ERROR`
 - Extension nunca crasha por mensagem inválida
 

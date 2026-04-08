@@ -2,7 +2,8 @@
 
 **Status**: Aprovado  
 **Data**: 2026-04-08  
-**Decisor(es)**: Team
+**Decisor(es)**: Team  
+**Supersedes**: ADR-003 (seção Rollback)
 
 ## Contexto
 
@@ -40,6 +41,19 @@ Histórico de operações registra:
 - Operação (sync, delete, rename)
 - Arquivos afetados
 - Status (success, error, conflict)
+
+**Reconsideração Futura**:
+Esta decisão pode ser reconsiderada em versões futuras se:
+- Surgir demanda clara de usuários por rollback nativo na UI
+- Aparecerem casos de uso onde Git commands não são suficientes
+- Houver recursos de desenvolvimento disponíveis após features core
+
+**Alternativas Manuais**:
+Usuários podem usar comandos Git diretamente:
+- `git revert <commit>` - reverte commit específico criando novo commit
+- `git reset --hard <commit>` - volta a um commit anterior (destructivo)
+- `git log` - visualiza histórico de commits
+- `git show <commit>` - inspeciona mudanças de um commit específico
 
 ## Consequências
 

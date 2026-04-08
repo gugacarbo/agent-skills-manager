@@ -213,6 +213,157 @@ function compareLineByLine(
 }
 ```
 
+### Definição de "Linha" e Normalização
+
+#### Line Endings
+
+O merge preserva os line endings originais do arquivo:
+
+- **Cross-platform**: Suporta tanto `\n` (Unix/macOS) quanto `\r\n` (Windows)
+- **Preservação**: Mantém o line ending original do arquivo base
+- **Conversão**: Não converte automaticamente entre formatos
+
+```typescript
+function detectLineEnding(content: string): '\n' | '\r\n' {
+  // Detecta primeiro line ending encontrado
+  if (content.includes('\r\n')) {
+    return '\r\n';
+  }
+  return '\n';
+}
+
+function splitLines(content: string): string[] {
+  // Preserva line ending original
+  const lineEnding = detectLineEnding(content);
+  return content.split(lineEnding);
+}
+```
+
+#### Whitespace Handling
+
+**Whitespace-only lines** são normalizadas para comparação:
+
+- `"   "` (apenas espaços) é tratado como equivalente a `""` (linha vazia)
+- Trailing whitespace é ignorado na comparação
+- Leading whitespace é preservado (importante para indentação)
+
+```typescript
+function normalizeWhitespace(line: string): string {
+  // Remove trailing whitespace, preserva leading
+  return line.trimEnd();
+}
+
+function areLinesEquivalent(line1: string, line2: string): boolean {
+  const norm1 = normalizeWhitespace(line1);
+  const norm2 = normalizeWhitespace(line2);
+  
+  // Whitespace-only lines são tratadas como equivalentes
+  if (norm1 === '' && norm2 === '') {
+    return true;
+  }
+  
+  return norm1 === norm2;
+}
+```
+
+### Merge para Arquivos Estruturados (YAML/JSON)
+
+Para arquivos estruturados como YAML e JSON, usamos **merge híbrido**:
+
+#### Estratégia Híbrida
+
+1. **Tentar merge estrutural** (parsing AST)
+2. Se parsing falhar ou merge estrutural for ambíguo → **fallback para line-by-line**
+
+```typescript
+async function mergeStructuredFile(
+  source: string,
+  target: string,
+  fileType: 'yaml' | 'json'
+): Promise<MergeResult> {
+  try {
+    // 1. Tentar parsing estrutural
+    const sourceObj = parseStructured(source, fileType);
+    const targetObj = parseStructured(target, fileType);
+    
+    // 2. Merge de objetos (deep merge)
+    const merged = deepMerge(sourceObj, targetObj);
+    
+    // 3. Verificar se há conflitos estruturais
+    if (hasStructuralConflicts(sourceObj, targetObj)) {
+      throw new Error('Conflito estrutural detectado');
+    }
+    
+    // 4. Serializar resultado
+    const result = serializeStructured(merged, fileType);
+    
+    return {
+      type: 'different',
+      action: 'merge-structural',
+      result
+    };
+  } catch (error) {
+    // Fallback: merge line-by-line naive
+    console.warn(`Merge estrutural falhou para ${fileType}, usando line-by-line`);
+    return compareLineByLine(
+      source.split('\n'),
+      target.split('\n')
+    );
+  }
+}
+
+function hasStructuralConflicts(obj1: any, obj2: any): boolean {
+  // Detecta propriedades modificadas em ambos os lados com valores diferentes
+  const keys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
+  
+  for (const key of keys) {
+    if (key in obj1 && key in obj2) {
+      if (JSON.stringify(obj1[key]) !== JSON.stringify(obj2[key])) {
+        // Mesma propriedade modificada em ambos - conflito estrutural
+        return true;
+      }
+    }
+  }
+  
+  return false;
+}
+```
+
+### Definição de "Ambiguidade" em Auto-Merge
+
+#### Mudanças Adjacentes vs. Overlapping
+
+**Adjacentes** (linhas vizinhas) **NÃO são ambíguas**:
+```typescript
+// Git modificou linha 5, Global modificou linha 7
+// Contexto de 3 linhas: linha 7 está fora do contexto de linha 5
+// Resultado: Auto-merge permitido
+```
+
+**Overlapping** (dentro do contexto) **SÃO ambíguas**:
+```typescript
+// Git modificou linha 5, Global modificou linha 6
+// Contexto de 3 linhas: linha 6 está dentro do contexto de linha 5
+// Resultado: Conflito manual
+```
+
+#### Linhas de Contexto
+
+Utilizamos **3 linhas de contexto** (padrão git diff):
+
+```typescript
+const CONTEXT_LINES = 3;
+
+function isOverlapping(line1: number, line2: number): boolean {
+  return Math.abs(line1 - line2) <= CONTEXT_LINES;
+}
+
+// Exemplo
+isOverlapping(5, 7);  // false - diferença de 2, mas linha 7 está na borda
+isOverlapping(5, 6);  // true - diferença de 1, dentro do contexto
+isOverlapping(10, 14); // false - diferença de 4, fora do contexto
+```
+
 ## Alternativas Consideradas
 
 ### ❌ Opção 1: Merge Agressivo

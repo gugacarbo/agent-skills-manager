@@ -27,10 +27,25 @@ PathResolver está documentado mas implementação foi diferida. Sync Engine (Fa
 **PathResolver implementado agora na Fase 1 (pré-requisito para Fase 2).**
 
 Implementação em `shared/src/path-resolver.ts` com:
-- Normalização de paths
-- Resolução relativo → absoluto
-- Validação de existência
-- Transformação entre workspaces
+
+**API Principal**:
+```typescript
+class PathResolver {
+  normalize(path: string): string;
+  resolve(relativePath: string, base?: string): string;
+  validate(path: string): boolean;
+}
+```
+
+**Funcionalidades**:
+- `normalize()`: Normalização de paths removendo redundâncias
+- `resolve()`: Resolução relativo → absoluto usando `path.resolve` + validação
+- `validate()`: Validação de existência e segurança combinadas
+
+**Características Especiais**:
+- Resolve symlinks para path real usando `fs.realpathSync()`
+- Prevenção de path traversal attacks através de validação pós-resolução
+- Transformação entre workspaces (método auxiliar)
 
 ## Consequências
 

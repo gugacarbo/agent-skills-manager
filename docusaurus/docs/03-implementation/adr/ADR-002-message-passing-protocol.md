@@ -37,7 +37,24 @@ type ExtensionMessage =
   | { type: 'TREE_REFRESH' }
 ```
 
-Capabilities são definidas como tipos compartilhados para descoberta em runtime.
+### Sistema de Capabilities
+
+Capabilities permitem descoberta de funcionalidades em runtime:
+
+**Lista estática de capabilities**:
+- `sync` - Sincronização de patterns
+- `tree` - Navegação em árvore de skills  
+- `config` - Gerenciamento de configuração
+
+**Versionamento**: 
+Capabilities suportam versionamento no formato `capability@version` (ex: `sync@2.0`, `tree@1.0`)
+
+**Registro**:
+Capabilities são centralizadas em `shared/src/capabilities.ts` que fornece:
+- Lista canônica de capabilities disponíveis
+- Versões de cada capability
+- Validação e parsing de capabilities
+- Helpers para verificação de compatibilidade
 
 ## Consequências
 

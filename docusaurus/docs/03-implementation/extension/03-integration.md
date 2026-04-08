@@ -24,12 +24,41 @@ Objeto fornecido pelo VS Code à função `activate()` contendo informações e 
 
 A extensão importa o módulo `vscode` mas não utiliza nenhuma API no momento. O parâmetro `_context` possui prefixo `_` indicando que não é utilizado.
 
-## Próximas Integrações
+## Uso do ExtensionContext
 
-Para implementar funcionalidades, a extensão precisará:
-- Registrar comandos via `vscode.commands.registerCommand()`
-- Adicionar disposables em `context.subscriptions`
-- Utilizar APIs de workspace, window, ou language features
+### globalState
+
+Armazenamento persistente usado para:
+
+```typescript
+// Cache de hashes para detecção de mudanças
+interface HashCache {
+  [filePath: string]: string; // path -> hash
+}
+
+await context.globalState.update('hashCache', hashCache);
+const cache = context.globalState.get<HashCache>('hashCache', {});
+```
+
+### subscriptions
+
+Array para registrar disposables que serão automaticamente limpos:
+
+```typescript
+// Todos os recursos que precisam de cleanup
+context.subscriptions.push(
+  ...commands,           // Comandos registrados
+  fileWatcher,          // File system watcher
+  webviewProvider,      // Webview provider
+  statusBarItem         // Status bar item
+);
+```
+
+### Outros Recursos Utilizados
+
+- **extensionPath**: Caminho para assets da extensão
+- **extensionUri**: URI base para webview resources
+- **workspaceState**: Estado específico do workspace (não utilizado inicialmente)
 
 ## Referências
 
