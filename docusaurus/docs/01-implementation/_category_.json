@@ -1,0 +1,10 @@
+{
+	"position": 1,
+	"label": "Implementação",
+	"key": "implementation",
+	"collapsible": false,
+	"collapsed": false,
+	"customProps": {
+		"description": "Guia de implementacao por fases e modulos do Agent Skills Manager"
+	}
+}

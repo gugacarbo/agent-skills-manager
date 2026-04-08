@@ -1,0 +1,56 @@
+---
+title: Configuration & Validation
+description: Configuration schema, validation, storage hierarchy, and runtime behavior
+---
+
+## Contrato
+
+Fonte de verdade de tipos: `shared/src/config.ts`.
+
+Campos de `AppConfig`:
+
+- `agent`.
+- `syncDirection`: `push | pull | both`.
+- `autoSync`.
+- `debounceMs`.
+- `logLevel`: `debug | info | warn | error`.
+- `logToFile`.
+
+## Validação
+
+- Planejamento define validação por Zod no pacote `shared`.
+- Estado atual: `shared/src/schemas.ts` ainda usa schemas placeholder (`passthrough`) para configuração completa.
+- Requisito: validar antes de aplicar configuração e retornar erro estruturado em caso inválido.
+
+## Hierarquia de Configuração
+
+Ordem de precedência (maior para menor):
+
+1. Workspace settings (`.vscode/settings.json`).
+2. User settings do VS Code.
+3. Defaults definidos no schema.
+
+Diretriz: não usar arquivo de configuração customizado paralelo.
+
+## Comportamento em Runtime
+
+- Mudanças em configuração devem ser reativas (hot-reload).
+- Atualizações de config devem refletir na webview via protocolo de mensagens.
+- Alterações potencialmente destrutivas exigem confirmação quando aplicável ao fluxo de sync.
+
+## Decisões
+
+- Persistência nativa via Settings API do VS Code.
+- `autoSync` habilitado por padrão no plano.
+- Falha de validação não pode derrubar extensão; deve degradar com segurança.
+
+## Critérios de Teste
+
+- Cobrir tipos válidos/inválidos, enums, limites numéricos e campos obrigatórios.
+- Verificar precedência de fontes de configuração.
+- Verificar comportamento reativo após mudança de setting.
+
+## Referências
+
+- [Synchronization System](./synchronization)
+- [Testing & Observability](./testing)

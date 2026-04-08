@@ -1,0 +1,44 @@
+---
+title: Architecture Overview
+description: System architecture, components, and technology stack for the Agent Skills Manager VS Code extension
+---
+
+## Visão Geral
+
+Arquitetura planejada em monorepo pnpm com três pacotes: `extension`, `webview` e `shared`.
+
+## Componentes
+
+| Pacote | Runtime | Responsabilidade principal |
+| --- | --- | --- |
+| `extension/` | Node.js + VS Code API | ciclo de vida, comandos, host da webview, integração de arquivo/Git |
+| `webview/` | React 19 + Vite | UI, interação do usuário e envio/recebimento de mensagens |
+| `shared/` | TypeScript | contratos de tipos, mensagens e schemas comuns |
+
+## Stack
+
+- Node.js no host da extensão.
+- React 19 + TypeScript na webview.
+- Vite para build da webview.
+- pnpm workspaces para monorepo.
+- Zod para validação em runtime.
+
+## Decisões Arquiteturais
+
+- Separação por pacote para isolar runtime de extensão, runtime de UI e contratos compartilhados.
+- Protocolo de mensagens como fonte única de contrato entre host e webview.
+- Telemetria zero: observabilidade local apenas.
+- Tree view e sincronização são superfícies centrais do produto, não recursos acessórios.
+
+## Qualidades Esperadas
+
+- Desempenho: debounce de eventos e virtualização na UI.
+- Segurança: validação de input e caminhos antes de operações destrutivas.
+- Privacidade: sem envio de métricas para serviços externos.
+
+## Referências
+
+- [Configuration & Validation](./configuration)
+- [Path Resolution](./path-resolution)
+- [Synchronization System](./synchronization)
+- [Features & Priorities](./features)

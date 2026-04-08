@@ -1,0 +1,58 @@
+---
+title: Testing & Observability
+description: Testing strategy, coverage requirements, logging, and monitoring approach
+---
+
+## Estratégia de Testes
+
+Framework alvo: Vitest (unitário, integração e componente).
+
+Cobertura alvo por área:
+
+| Área                   | Meta |
+| ---------------------- | ---- |
+| Path resolution        | 95%  |
+| Configuração e schemas | 95%  |
+| Sync engine            | 95%  |
+| Operações Git          | 90%  |
+| Handlers de mensagem   | 90%  |
+| Componentes UI         | 80%  |
+
+Meta global: mínimo de 80%.
+
+## Escopo Obrigatório de Teste
+
+- Unitário: contratos, validação, regras de resolução de conflito e casos de erro.
+- Integração: fluxo completo de sync com filesystem temporário.
+- UI: envio/recebimento de mensagens e atualização de estado.
+- Performance: tempo de sync, custo de hash e escalabilidade por volume.
+
+## Observabilidade
+
+- Logging estruturado em canal local da extensão.
+- Níveis: `debug`, `info`, `warn`, `error`.
+- Configuração por `logLevel` e `logToFile`.
+- Política de telemetria zero: nenhum envio externo de dados.
+
+## Métricas Locais
+
+- arquivos processados/modificados/conflitados.
+- duração do sync.
+- custo de hash.
+- tempo de operações Git e resolução de conflito.
+
+## Integração Contínua
+
+- Pipeline deve executar instalação, testes e cobertura.
+- Publicação de cobertura é opcional conforme contexto do repositório/time.
+
+## Estado Atual Confirmado
+
+- Há contratos compartilhados para mensagens e configuração no pacote `shared`.
+- Implementação completa de testes do fluxo final ainda pertence às fases de implementação.
+
+## Referências
+
+- [Configuration & Validation](./configuration)
+- [Synchronization System](./synchronization)
+- [Features & Priorities](./features)

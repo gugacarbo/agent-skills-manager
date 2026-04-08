@@ -1,0 +1,11 @@
+{
+    "label": "02-operacao",
+    "position": 2,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Operacao",
+        "description": "Politicas operacionais de recuperacao e rastreabilidade."
+    }
+}

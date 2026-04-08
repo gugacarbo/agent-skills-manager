@@ -1,0 +1,11 @@
+{
+    "label": "01-extension",
+    "position": 1,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Extension (Fase 4)",
+        "description": "Configuracao avancada por agente e framework de verificacao de skills."
+    }
+}

@@ -20,13 +20,13 @@ function HomepageHeader(): ReactNode {
 					{" "}
 					<Link
 						className="button button--secondary button--lg"
-						to="/docs/planning/architecture-and-dev-guide"
+						to="/docs/planning/architecture"
 					>
 						📖 Documentação
 					</Link>
 					<Link
 						className="button button--outline button--lg"
-						to="/docs/planning/architecture-and-dev-guide"
+						to="/docs/planning/features"
 					>
 						🚀 Primeiros Passos
 					</Link>

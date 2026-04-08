@@ -1,0 +1,50 @@
+---
+title: Features & Priorities
+description: Feature scope, prioridades de produto e limites arquiteturais
+---
+
+## Prioridades
+
+| Feature | Prioridade | Motivo |
+| --- | --- | --- |
+| Core extension, webview, config, mensagens, sync | Critical | base funcional do produto |
+| Git, conflitos, tree view | High | operação segura e escalável |
+| busca, split editor, logs estruturados, testes de skill, multi-agent | Medium | produtividade e confiabilidade |
+| versionamento avançado de skill, IA para conflitos, automações amplas, CI/CD | Low | evolução pós-base estável |
+
+## Em Escopo
+
+- Ciclo de vida da extensão e comandos.
+- Contratos compartilhados (`AppConfig`, mensagens, tipos).
+- Sincronização com detecção de mudança, resolução de conflito e integração Git.
+- UI com árvore virtualizada, painel de config e estado de sync.
+- Testes e logs locais.
+
+## Fora de Escopo
+
+- Template library.
+- Auto-rollback automático.
+- Publicação no Marketplace como requisito base.
+- Telemetria externa.
+- Composer visual de skills.
+- Cloud sync próprio fora do fluxo Git.
+- Colaboração em tempo real nativa.
+
+## Decisões de Produto
+
+- Reduzir escopo para priorizar estabilidade de sync e segurança de dados.
+- Manter pull explícito e confirmações para ações destrutivas.
+- Auto-push opcional, não obrigatório.
+
+## Dependências Principais
+
+- Configuração e mensagens sustentam toda a UI.
+- Path resolution e sync sustentam Git/conflitos.
+- Tree view sustenta busca e fluxos de edição assistida.
+
+## Referências
+
+- [Architecture Overview](./architecture)
+- [Configuration & Validation](./configuration)
+- [Synchronization System](./synchronization)
+- [Testing & Observability](./testing)

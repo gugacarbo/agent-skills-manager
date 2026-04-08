@@ -1,0 +1,11 @@
+{
+    "label": "02-webview",
+    "position": 2,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Webview (Fase 2)",
+        "description": "Interface de status de sincronizacao e tratamento de conflitos."
+    }
+}

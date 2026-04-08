@@ -1,0 +1,11 @@
+{
+    "label": "Fase 2 - Sync Engine",
+    "position": 2,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Fase 2 - Sync Engine",
+        "description": "Implementacao de sincronizacao, hash, politicas operacionais e painel de sync."
+    }
+}

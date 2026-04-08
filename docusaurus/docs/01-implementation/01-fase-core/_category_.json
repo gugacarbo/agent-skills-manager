@@ -1,0 +1,11 @@
+{
+    "label": "Fase 1 - Core",
+    "position": 1,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Fase 1 - Core",
+        "description": "Base de tipos, protocolos, extension e webview para o inicio da implementacao."
+    }
+}

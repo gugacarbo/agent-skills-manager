@@ -1,0 +1,11 @@
+{
+    "label": "04-webview",
+    "position": 4,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Webview (Fase 1)",
+        "description": "Componentes base da interface para navegacao e configuracao."
+    }
+}

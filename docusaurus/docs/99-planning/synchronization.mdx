@@ -1,0 +1,79 @@
+---
+title: Synchronization System
+description: Sync engine architecture, conflict resolution, Git integration, and operational behavior
+---
+
+## Objetivo
+
+Definir o fluxo de sincronização entre workspace local e origem remota de skills, com segurança e controle explícito do usuário.
+
+## Componentes Planejados
+
+- Detector de mudança.
+- Comparador de arquivos.
+- Resolvedor de conflito.
+- Integração Git.
+- Logger de auditoria.
+
+## Estratégia de Detecção
+
+- Primária: timestamp.
+- Fallback: hash SHA-256 quando timestamp for insuficiente.
+
+Motivo: reduzir custo no caminho comum sem abrir mão de precisão.
+
+## Conflitos
+
+Estados operacionais:
+
+- `SAME`: sem ação.
+- `LOCAL_NEWER`: atualiza remoto.
+- `REMOTE_NEWER`: atualiza local.
+- `CONFLICT`: exige decisão.
+
+Política:
+
+- Auto-resolver apenas casos seguros.
+- Prompt obrigatório para conflito real.
+- Arquivo binário sempre exige decisão manual.
+
+## Delete/Rename
+
+- Nunca automático.
+- Sempre com confirmação explícita.
+
+## Integração Git
+
+- Auto-commit antes do sync (planejado como padrão).
+- Pull manual (gatilho do usuário).
+- Auto-push opcional e desativado por padrão.
+
+## Retry e Concorrência
+
+- Retry: até 3 tentativas com backoff exponencial para falhas transitórias.
+- Coordenação multi-workspace via lock de arquivo com timeout para evitar deadlock.
+
+## Fluxo Operacional
+
+1. Validar configuração.
+2. Carregar estado local/remoto.
+3. Detectar mudanças.
+4. Resolver conflitos (automático seguro ou prompt).
+5. Aplicar operações de arquivo/Git.
+6. Publicar resultado e atualizar UI.
+7. Registrar auditoria.
+
+## Observabilidade e Metas
+
+- Logs estruturados (`debug`, `info`, `warn`, `error`).
+- Metas de planejamento: acurácia alta, baixa latência e taxa relevante de auto-resolução segura.
+
+## Estado Atual Confirmado
+
+- A arquitetura de sync está documentada em planejamento e fase de implementação.
+- O runtime atual da extensão ainda não executa o fluxo completo de sync.
+
+## Referências
+
+- [Configuration & Validation](./configuration)
+- [Testing & Observability](./testing)

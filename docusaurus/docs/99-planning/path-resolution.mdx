@@ -1,0 +1,50 @@
+---
+title: Path Resolution
+description: PathResolver class for multi-workspace path resolution and validation
+---
+
+## Objetivo
+
+Definir um resolvedor único de caminhos para ambiente multi-workspace, com foco em segurança e previsibilidade.
+
+## Contrato Planejado
+
+Entidade: `PathResolver`.
+
+API planejada:
+
+- `constructor(workspaceRoot)`.
+- `resolve(relativePath)`.
+- `normalize(path)`.
+- `isValid(path)`.
+- `exists(path)`.
+- `relativize(absolutePath)`.
+
+## Regras Obrigatórias
+
+- Nunca permitir escape do root da workspace.
+- Normalizar separadores e segmentos (`.`/`..`).
+- Validar links simbólicos contra limite da workspace.
+- Usar paths relativos para persistência portátil em índices de sync.
+
+## Decisões
+
+- Centralizar lógica de path em um único componente.
+- Separar resolução de path e checagem de existência.
+- Mensagens de erro devem ser explícitas para diagnóstico.
+
+## Estado Atual Confirmado
+
+- O contrato de `PathResolver` é parte do planejamento e documentação de implementação.
+- Não há implementação ativa em `extension/src` nesta fase atual do repositório.
+
+## Critérios de Teste
+
+- Cobrir normalização, traversal, limites de workspace, symlink e round-trip (`resolve` ↔ `relativize`).
+- Garantir que caminhos fora da workspace sejam rejeitados.
+
+## Referências
+
+- [Architecture Overview](./architecture)
+- [Synchronization System](./synchronization)
+- [Testing & Observability](./testing)

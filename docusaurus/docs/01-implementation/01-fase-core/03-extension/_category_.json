@@ -1,0 +1,11 @@
+{
+    "label": "03-extension",
+    "position": 3,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Extension (Fase 1)",
+        "description": "Lifecycle, comandos e integracao inicial com webview."
+    }
+}

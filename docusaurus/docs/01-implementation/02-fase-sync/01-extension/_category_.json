@@ -1,0 +1,11 @@
+{
+    "label": "01-extension",
+    "position": 1,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Extension (Fase 2)",
+        "description": "Motor de sincronizacao e politicas de operacao."
+    }
+}

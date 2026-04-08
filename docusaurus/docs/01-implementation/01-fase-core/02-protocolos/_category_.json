@@ -1,0 +1,11 @@
+{
+    "label": "02-protocolos",
+    "position": 2,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "title": "Protocolos (Fase 1)",
+        "description": "Formato, tipos e fluxo de comunicacao entre extension e webview."
+    }
+}
