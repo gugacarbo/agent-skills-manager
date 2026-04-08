@@ -1,11 +1,11 @@
 {
-    "position": 2,
-    "label": "Desenvolvimento",
-    "key": "development",
-    "collapsible": false,
-    "collapsed": false,
-    "className": "red",
-    "customProps": {
-        "description": "This description can be used in the swizzled DocCard"
-    }
+	"position": 2,
+	"label": "Desenvolvimento",
+	"key": "development",
+	"collapsible": true,
+	"collapsed": false,
+	"className": "red",
+	"customProps": {
+		"description": "Documentação técnica completa para desenvolvimento do Agent Skills Manager"
+	}
 }

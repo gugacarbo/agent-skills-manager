@@ -1,0 +1,10 @@
+{
+	"position": 1,
+	"label": "Arquitetura",
+	"key": "arquitetura",
+	"collapsible": true,
+	"collapsed": false,
+	"customProps": {
+		"description": "Arquitetura, componentes e estrutura do sistema"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"position": 3,
+	"label": "Features",
+	"key": "features",
+	"collapsible": true,
+	"collapsed": false,
+	"customProps": {
+		"description": "Decisões de features e funcionalidades"
+	}
+}

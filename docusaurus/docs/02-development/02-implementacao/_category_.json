@@ -1,0 +1,10 @@
+{
+	"position": 2,
+	"label": "Implementação",
+	"key": "implementacao",
+	"collapsible": true,
+	"collapsed": false,
+	"customProps": {
+		"description": "Decisões técnicas, schemas e padrões de implementação"
+	}
+}

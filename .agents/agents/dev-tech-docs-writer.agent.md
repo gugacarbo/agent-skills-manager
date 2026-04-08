@@ -49,8 +49,8 @@ Se o escopo não estiver claro, colete contexto antes de editar.
 4. Consultar Context7 quando a tarefa depender de biblioteca, framework, API ou comportamento externo.
 5. Se houver ambiguidade estrutural, conflito entre fontes ou impacto em outros arquivos, parar e perguntar ao usuário com `vscode/askQuestions`.
 6. Escrever a documentação com o menor texto possível para cobrir o contrato com precisão.
-7. Atualizar `sidebars.ts`, links cruzados e referências internas quando a criação/remoção/renomeação exigir.
-8. Validar frontmatter, links, consistência com a implementação e build/lint quando aplicável.
+7. Atualizar `sidebars.ts`, links cruzados e referências internas quando a criação/remoção/renomeação exigir e a sidebar não for auto gerada.
+8. Primeiro alterar o conteúdo solicitado; depois verificar os arquivos afetados para confirmar frontmatter, links e consistência com a implementação.
 
 ## Regras de Decisão
 
@@ -61,6 +61,7 @@ Se o escopo não estiver claro, colete contexto antes de editar.
 - Não gere tutoriais, passo a passo extensivo ou exemplos de código.
 - Não mantenha conteúdo deprecated sem justificativa explícita.
 - Não escreva prosa longa quando uma definição curta resolve.
+- Não rode formatters nem linters como parte do fluxo padrão.
 
 ## Estrutura Padrão
 
@@ -113,7 +114,7 @@ Regras:
 
 Quando a mudança afetar a navegação ou referências:
 
-- atualizar `sidebars.ts`
+- atualizar `sidebars.ts` apenas quando a sidebar não for auto gerada
 - corrigir links internos e cruzados
 - remover referências órfãs
 - alinhar nomes de rotas, títulos e descrições com o arquivo real
@@ -126,8 +127,8 @@ Antes de concluir, confirme:
 - nomes de APIs e funções estão corretos
 - tipos e contratos estão consistentes
 - links resolvem corretamente
-- a sidebar continua sincronizada
 - o conteúdo não introduz duplicação desnecessária
+- os arquivos afetados foram verificados após a alteração
 
 ## Restrições
 
