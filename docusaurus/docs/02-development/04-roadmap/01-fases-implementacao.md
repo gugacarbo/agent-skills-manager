@@ -33,19 +33,20 @@ gantt
 
 ### Entregas
 
-| Entrega                      | Descrição                      |
-| ---------------------------- | ------------------------------ |
-| Estrutura extensão VS Code   | Pastas e configs criadas       |
-| Webview (React + TypeScript) | Build configurado              |
-| Path resolver                | Módulo implementado            |
-| TreeView                     | Navegação hierárquica          |
-| Configuração JSON            | Schema Zod implementado        |
-| VS Code API integration      | activate/deactivate funcionais |
+| Entrega                      | Descrição                      | Status |
+| ---------------------------- | ------------------------------ | ------ |
+| Estrutura extensão VS Code   | Pastas e configs criadas       | ✅ Done |
+| Webview (React + TypeScript) | Build configurado              | ✅ Done |
+| Path resolver                | Módulo a implementar           | 📋 Todo |
+| TreeView                     | Navegação hierárquica          | 📋 Todo |
+| Configuração JSON            | Schema Zod implementado        | ✅ Done |
+| VS Code API integration      | activate/deactivate funcionais | ✅ Done |
 
 ### Critérios de Aceite
 
-- [ ] Extensão carrega no VS Code
-- [ ] Webview renderiza corretamente
+- [x] Extensão carrega no VS Code
+- [x] Webview renderiza corretamente
+- [ ] PathResolver implementado e testado
 - [ ] TreeView navega por skills/agents
 - [ ] Configuração é lida/salva
 - [ ] Message passing funciona
@@ -122,11 +123,15 @@ gantt
 ### Entregas
 
 #### Editor Assistido
-- [ ] Editor de skills assistido (sem drag-and-drop)
-- [ ] Preview em tempo real
+
+- [ ] Editor de skills assistido - **split layout** (formulário + preview)
+- [ ] Preview em tempo real com markdown rendering
 - [ ] Validação de schema inline
-- [ ] Syntax highlighting
+- [ ] Syntax highlighting no preview
 - [ ] Auto-complete para metadata
+- [ ] Auto-save
+
+Ver [ADR-013](../../03-implementation/adr/ADR-013-editor-assistido-ui.md) para design completo.
 
 #### Preview de Changes
 - [ ] Lista de arquivos modificados
@@ -162,6 +167,25 @@ gantt
 ~~#### Templates e Presets~~ (Removido temporariamente)
 
 > 🚫 **Feature removida do roadmap**. Template Library foi descontinuada desta fase.
+
+#### Multi-Agent Orchestration (Manual)
+- [ ] Suporte a 2+ agents simultâneos (Copilot, Claude, outros)
+- [ ] Configuração via `.vscode/agents.json`
+- [ ] Seleção manual de agent por skill/workspace
+- [ ] UI visual para configuração
+- [ ] Roteamento manual (não automático)
+
+Ver [ADR-014](../../03-implementation/adr/ADR-014-multi-agent-config.md) para estrutura de config.
+
+#### Skill Testing Framework
+- [ ] Validação de schema (Zod)
+- [ ] Linting de regras customizáveis
+- [ ] Syntax checking para markdown
+- [ ] Erros claros antes de aplicar skill
+- [ ] UI para exibir erros de validação
+- [ ] Configuração de regras de linting
+
+Ver [ADR-015](../../03-implementation/adr/ADR-015-skill-testing-framework.md) para detalhes.
 
 #### Multi-Workspace
 - [ ] Gerenciamento de múltiplos destinos

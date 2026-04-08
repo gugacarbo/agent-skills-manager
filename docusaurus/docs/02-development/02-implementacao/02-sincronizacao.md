@@ -19,13 +19,21 @@ graph LR
 
 ## 2. Detecção de Mudanças
 
-### Estratégias
+### Estratégia Híbrida (Aprovada)
 
-| Método       | Precisão | Performance |
-| ------------ | -------- | ----------- |
-| Timestamp    | Média    | Rápida      |
-| Hash SHA-256 | Alta     | Variável    |
-| Git diff     | Alta     | Lenta       |
+**Decisão**: Usar estratégia híbrida para otimizar performance mantendo precisão.
+
+Algoritmo:
+1. Comparar timestamp + tamanho primeiro (fast path)
+2. Se iguais → assumir sem mudança (skip)
+3. Se diferentes → calcular SHA-256 para confirmar
+4. Comparar hashes para decisão final
+
+| Método            | Precisão | Performance | Uso                        |
+| ----------------- | -------- | ----------- | -------------------------- |
+| Timestamp + Size  | Média    | Muito Rápida| Triagem inicial            |
+| Hash SHA-256      | Alta     | Variável    | Confirmação quando diferente|
+| Git diff          | Alta     | Lenta       | Não usado                  |
 
 ### Comparação por Hash
 
@@ -35,6 +43,8 @@ async function calculateHash(filePath: string): Promise<string> {
   return crypto.createHash('sha256').update(content).digest('hex')
 }
 ```
+
+Ver [ADR-008](../../03-implementation/adr/ADR-008-hash-strategy.md) para detalhes completos.
 
 ## 3. Resolução de Conflitos
 
@@ -73,36 +83,45 @@ graph TD
 
 ### Política de Delete e Rename
 
-**Decisão**: sincronizar deleções e renomeações com preview configurável.
+**Decisão**: sempre perguntar ao usuário, sem opção de auto-aprovação.
 
-- Preview habilitado por padrão para delete/rename
-- Usuário pode configurar auto-aprovação (`autoApproveDeletes: boolean`)
-- Aplicação em lote após confirmação (ou automática se configurado)
-- Rollback não implementado na Fase 2
+- Preview detalhado obrigatório para delete/rename
+- Usuário deve confirmar explicitamente cada operação destrutiva
+- Sem configuração `autoApproveDeletes` (máxima segurança)
+- Aplicação em lote após confirmação
+
+Ver [ADR-011](../../03-implementation/adr/ADR-011-delete-rename-policy.md) para detalhes.
 
 ## 4. Integração Git
 
 ### Operações
 
 - **Auto-commit** após sync
-- **Auto-pull** antes do sync (padrão: primeiro sync, configurável via `gitPullTiming`)
+- **Auto-pull** nunca automático (usuário faz pull manual)
 - **Push** automático (configurável)
-- **Retry** com backoff exponencial
+- **Retry** com backoff exponencial (3x: 2s, 4s, 8s)
+
+Ver [ADR-009](../../03-implementation/adr/ADR-009-git-pull-policy.md) e [ADR-010](../../03-implementation/adr/ADR-010-retry-policy.md).
 
 ### Tratamento de Erros
 
-- Erros de rede: retry com backoff
+- Erros de rede: retry 3x com backoff exponencial (2s, 4s, 8s)
 - Conflitos Git: notificação ao usuário
 - Merge conflicts: fallback para resolução manual
 
 ## 5. Histórico de Operações
 
-- Log de operações realizadas
-- Audit trail de mudanças
-- ~~Rollback de operações~~ (removido da Fase 2)
+- Log estruturado de operações realizadas
+- Audit trail de mudanças com timestamps
+- Rollback via Git history (comandos `git revert` ou `git reset`)
 
-## 6. Métrica de Performance
+Ver [ADR-012](../../03-implementation/adr/ADR-012-rollback-removal.md) para decisão sobre rollback.
 
-- Métrica principal: throughput (arquivos por minuto)
-- Benchmark inicial: A definir (cenário específico será documentado posteriormente)
+## 6. Métricas de Performance
+
+- **Abordagem**: Otimizar conforme necessário, sem targets fixos
+- Monitoramento qualitativo: sem lag perceptível na UI
+- Benchmark será definido em cenários específicos quando necessário
+
+Ver [ADR-008](../../03-implementation/adr/ADR-008-hash-strategy.md) para estratégia de performance.
 

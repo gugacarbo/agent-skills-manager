@@ -6,13 +6,13 @@ description: Protocolo de comunicação Extension ↔ Webview com capabilities
 
 # ADR-002: Protocolo de Mensagens por Capability
 
-**Data**: 2026-04-08  
-**Status**: Aceito  
-**Decisores**: Equipe de desenvolvimento  
+**Data**: 2026-04-08
+**Status**: Aceito
+**Decisores**: Equipe de desenvolvimento
 
 ## Contexto
 
-A comunicação entre VS Code Extension (Node.js) e Webview (React) usa `postMessage`. 
+A comunicação entre VS Code Extension (Node.js) e Webview (React) usa `postMessage`.
 Precisamos de um protocolo:
 - Type-safe (TypeScript)
 - Extensível para novas features
@@ -37,7 +37,7 @@ export type ExtensionMessage =
   | { type: 'GET_STATUS' }
   | { type: 'STATUS_UPDATE'; payload: { capabilities: string[] } }
   | { type: 'CONFIG_UPDATE'; payload: { config: AppConfig } }
-  
+
   // Sync Capability (opcional)
   | { type: 'SYNC_PATTERN'; payload: { destination: string } }
   | { type: 'SYNC_COMPLETE'; payload: { status: 'success'; syncedFiles: number } }
@@ -48,7 +48,7 @@ export type ExtensionMessage =
 ## Alternativas Consideradas
 
 ### Opção 1: Tipos duplicados em extension e webview
-- **Prós**: 
+- **Prós**:
   - Independência entre packages
   - Menos acoplamento
 - **Contras**:
@@ -57,7 +57,7 @@ export type ExtensionMessage =
   - Refactoring mais difícil
 
 ### Opção 2: RPC-style com request/response pairing
-- **Prós**: 
+- **Prós**:
   - Pattern request-response explícito
   - Timeouts nativos
 - **Contras**:
@@ -66,7 +66,7 @@ export type ExtensionMessage =
   - Biblioteca adicional necessária
 
 ### Opção Escolhida: União discriminada compartilhada
-**Justificativa**: 
+**Justificativa**:
 - TypeScript garante exaustividade em `switch`
 - Zero duplicação de código
 - Evolução do protocolo em um único lugar

@@ -39,7 +39,7 @@ export const ConfigSchema = z.object({
 
   autoSync: z
     .boolean()
-    .default(false)
+    .default(true)
     .describe('Habilita auto-sync via file watcher'),
 
   debounceMs: z
@@ -69,7 +69,7 @@ export type Config = z.infer<typeof ConfigSchema>
 | --------------- | ------- | --------------- | ------------------------------------------- |
 | `agent`         | string  | `copilot`       | Agent padrão: `copilot` ou `claude`         |
 | `syncDirection` | string  | `bidirectional` | Direção: `push`, `pull`, ou `bidirectional` |
-| `autoSync`      | boolean | `false`         | Habilita auto-sync via file watcher         |
+| `autoSync`      | boolean | `true`          | Habilita auto-sync via file watcher         |
 | `debounceMs`    | number  | `500`           | Debounce em ms para file watcher            |
 | `logLevel`      | string  | `info`          | Nível de log                                |
 | `logToFile`     | boolean | `false`         | Habilita log em arquivo                     |

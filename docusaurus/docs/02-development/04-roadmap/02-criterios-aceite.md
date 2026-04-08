@@ -24,8 +24,8 @@ description: Métricas de sucesso e checklist de aceitação por fase
 | Detecção de conflitos | > 95%             | Precisão na detecção                       |
 | Resolução automática  | 70%+              | Conflitos resolvidos automaticamente       |
 | Git commits           | sim               | Auto-commit após sync                      |
-| Auto-sync             | sim               | File watcher configurável                  |
-| Throughput            | A definir         | Benchmark será especificado posteriormente |
+| Auto-sync             | sim               | File watcher habilitado por padrão         |
+| Throughput            | Otimizar conforme necessário | Sem targets fixos, monitoramento qualitativo |
 
 ### Testes de Aceite
 
