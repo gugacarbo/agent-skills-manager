@@ -2,7 +2,7 @@
     "label": "Fase 1 - Core",
     "position": 1,
     "collapsible": true,
-    "collapsed": false,
+    "collapsed": true,
     "link": {
         "type": "generated-index",
         "title": "Fase 1 - Core",

@@ -2,7 +2,7 @@
     "label": "Fase 2 - Sync Engine",
     "position": 2,
     "collapsible": true,
-    "collapsed": false,
+    "collapsed": true,
     "link": {
         "type": "generated-index",
         "title": "Fase 2 - Sync Engine",

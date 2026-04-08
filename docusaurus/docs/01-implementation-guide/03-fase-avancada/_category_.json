@@ -2,10 +2,10 @@
     "label": "Fase 3",
     "position": 4,
     "collapsible": true,
-    "collapsed": false,
+    "collapsed": true,
     "link": {
         "type": "generated-index",
-        "title": "Fase 4 - Avancada",
+        "title": "Fase 3 - Avançada",
         "description": "Recursos avancados de configuracao multi-agent, testing de skills e operacao."
     }
 }

@@ -3,39 +3,54 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Heading from "@theme/Heading";
 import Layout from "@theme/Layout";
 import type { ReactNode } from "react";
-import styles from "./index.module.css";
 
 function HomepageHeader(): ReactNode {
 	const { siteConfig } = useDocusaurusContext();
 	return (
-		<header className={`hero ${styles.hero} pb-64`}>
-			<div className="container">
-				<Heading as="h1" className={`hero__title ${styles.hero__title}`}>
+		<header
+			className="hero py-16 px-5"
+			style={{
+				background:
+					"linear-gradient(180deg, var(--ifm-color-primary-darkest) 0%, var(--ifm-background-color) 100%)",
+			}}
+		>
+			<div className="container text-center">
+				<Heading
+					as="h1"
+					className="hero__title text-6xl font-extrabold tracking-tight mb-4"
+				>
 					🤖 {siteConfig.title}
 				</Heading>
-				<p className={`hero__subtitle ${styles.hero__subtitle}`}>
+				<p className="hero__subtitle text-xl max-w-xl mx-auto opacity-90 leading-relaxed">
 					{siteConfig.tagline}
 				</p>
-				<div className={`hero__buttons ${styles.hero__buttons}`}>
-					{" "}
+				<div className="hero__buttons flex gap-4 mt-8 justify-center flex-wrap">
 					<Link
 						className="button button--secondary button--lg"
-						to="/docs/planning/architecture"
+						to="/docs/category/fase-1---core"
 					>
 						📖 Documentação
 					</Link>
 					<Link
 						className="button button--outline button--lg"
-						to="/docs/planning/features"
+						to="/docs/category/01-shared"
 					>
 						🚀 Primeiros Passos
 					</Link>
 				</div>
-				<div className={styles.techBadges}>
-					<span className={styles.techBadge}>⚡ VS Code Extension</span>
-					<span className={styles.techBadge}>📦 TypeScript</span>
-					<span className={styles.techBadge}>🤖 Claude Desktop</span>
-					<span className={styles.techBadge}>🐙 GitHub Copilot</span>
+				<div className="flex justify-center gap-3 mt-10 flex-wrap">
+					<span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur-sm transition-colors hover:bg-white/25">
+						⚡ VS Code Extension
+					</span>
+					<span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur-sm transition-colors hover:bg-white/25">
+						📦 TypeScript
+					</span>
+					<span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur-sm transition-colors hover:bg-white/25">
+						🤖 Claude Desktop
+					</span>
+					<span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur-sm transition-colors hover:bg-white/25">
+						🐙 GitHub Copilot
+					</span>
 				</div>
 			</div>
 		</header>
@@ -52,28 +67,30 @@ function Feature({
 	description: string;
 }): ReactNode {
 	return (
-		<div className={styles.featureCard}>
-			<span className={styles.featureIcon}>{icon}</span>
-			<h3>{title}</h3>
-			<p>{description}</p>
+		<div className="p-8 rounded-xl border border-(--ifm-color-emphasis-200) bg-(--ifm-background-color) transition-all duration-250 ease-out hover:border-(--ifm-color-primary) hover:shadow-lg hover:shadow-[rgba(0,122,204,0.12)] hover:-translate-y-0.5">
+			<span className="text-4xl mb-4 block">{icon}</span>
+			<h3 className="text-lg font-bold mb-2">{title}</h3>
+			<p className="text-sm text-(--ifm-color-emphasis-700) leading-relaxed">
+				{description}
+			</p>
 		</div>
 	);
 }
 
 function HomepageFeatures(): ReactNode {
 	return (
-		<section className={styles.featuresSection}>
-			<div className="container">
-				<div className={styles.sectionHeader}>
-					<h2>Recursos Principais</h2>
-					<p>
+		<section className="py-20">
+			<div className="container max-w-5xl mx-auto px-4">
+				<div className="text-center mb-14">
+					<h2 className="text-3xl font-bold mb-3">Recursos Principais</h2>
+					<p className="text-lg text-(--ifm-color-emphasis-600) max-w-xl mx-auto">
 						Tudo que você precisa para gerenciar arquivos de agentes de IA
 						(skills, rules, agents.md, prompts.md, etc.) com eficiência e
 						segurança, incluindo seleção de padrões de salvamento para
 						diferentes plataformas (Claude, Copilot, etc.).
 					</p>
 				</div>
-				<div className={styles.featureGrid}>
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					<Feature
 						icon="📁"
 						title="Repositório Git como Fonte"
@@ -110,43 +127,56 @@ function HomepageFeatures(): ReactNode {
 	);
 }
 
+function StepCard({
+	number,
+	title,
+	children,
+}: {
+	number: number;
+	title: string;
+	children: React.ReactNode;
+}): ReactNode {
+	return (
+		<div className="relative p-6 rounded-xl border border-(--ifm-color-emphasis-200) transition-colors hover:border-(--ifm-color-primary) dark:border-(--ifm-color-emphasis-300)">
+			<span className="absolute -top-2.5 left-5 flex items-center justify-center w-5 h-5 rounded-full bg-(--ifm-color-primary) text-white text-xs font-bold">
+				{number}
+			</span>
+			<h3 className="text-sm font-bold mb-2">{title}</h3>
+			<div className="text-xs text-(--ifm-color-emphasis-700) leading-relaxed">
+				{children}
+			</div>
+		</div>
+	);
+}
+
 function QuickStart(): ReactNode {
 	return (
-		<section className={styles.quickstartSection}>
-			<div className="container">
-				<h2>Quick Start</h2>
-				<p>Configure em 4 passos simples.</p>
-				<div className={styles.quickstartGrid}>
-					<div className={styles.stepCard}>
-						<h3>Configurar Source Path</h3>
-						<p>
-							Abra as settings (<code>Ctrl+,</code>) e defina{" "}
-							<code>agentSkillsManager.skillSourcePath</code> com o caminho do
-							seu repositório de arquivos de agentes de IA (skills, rules,
-							agents.md, prompts.md, etc.).
-						</p>
-					</div>
-					<div className={styles.stepCard}>
-						<h3>Abrir a Sidebar</h3>
-						<p>
-							Clique no ícone <strong>Agent Skills</strong> na activity bar do
-							VS Code para abrir o Skills Explorer.
-						</p>
-					</div>
-					<div className={styles.stepCard}>
-						<h3>Ativar Skills</h3>
-						<p>
-							Use o toggle (ícone de olho) na TreeView para ativar skills por
-							workspace. Elas são sincronizadas automaticamente.
-						</p>
-					</div>
-					<div className={styles.stepCard}>
-						<h3>Configurar Destinos</h3>
-						<p>
-							Nas settings, defina <code>agentSkillsManager.destinations</code>{" "}
-							para onde as skills serão copiadas (Claude, Copilot, custom).
-						</p>
-					</div>
+		<section className="py-20">
+			<div className="container max-w-3xl mx-auto px-4">
+				<div className="text-center mb-8">
+					<h2 className="text-3xl font-bold mb-3">Quick Start</h2>
+					<p className="text-(--ifm-color-emphasis-600)">
+						Configure em 4 passos simples.
+					</p>
+				</div>
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<StepCard number={1} title="Configurar Source Path">
+						Abra as settings (<code>Ctrl+,</code>) e defina{" "}
+						<code>agentSkillsManager.skillSourcePath</code> com o caminho do seu
+						repositório de arquivos de agentes de IA.
+					</StepCard>
+					<StepCard number={2} title="Abrir a Sidebar">
+						Clique no ícone <strong>Agent Skills</strong> na activity bar do VS
+						Code para abrir o Skills Explorer.
+					</StepCard>
+					<StepCard number={3} title="Ativar Skills">
+						Use o toggle (ícone de olho) na TreeView para ativar skills por
+						workspace. Elas são sincronizadas automaticamente.
+					</StepCard>
+					<StepCard number={4} title="Configurar Destinos">
+						Nas settings, defina <code>agentSkillsManager.destinations</code>{" "}
+						para onde as skills serão copiadas.
+					</StepCard>
 				</div>
 			</div>
 		</section>
