@@ -204,8 +204,3 @@ Command Palette → Agent Skills: Sync Now
 ```
 
 Executa sincronização manual imediata
-
-## Referências
-
-- [Visão Geral da Arquitetura](./01-visao-geral) - Componentes do sync engine
-- [Configuração](./07-configuracao) - Opções de sync

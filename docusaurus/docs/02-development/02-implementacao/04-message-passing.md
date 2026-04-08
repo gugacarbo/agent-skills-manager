@@ -63,8 +63,3 @@ window.addEventListener('message', (event) => {
   }
 })
 ```
-
-## Referências
-
-- [Componentes](../arquitetura/01-componentes.md) - Visão geral dos componentes
-- [Padrões de Projeto](../arquitetura/03-padroes-projeto.md) - Outros padrões

@@ -19,11 +19,12 @@ graph TB
     D --> H[Git Sync]
 ```
 
-## Componentes Principais
 
 ### 1. VS Code Extension
 
 **Localização**: `extension/`
+
+**Status**: 🟡 Estrutura criada, implementação pendente
 
 **Responsabilidades**:
 - Ativação e lifecycle management
@@ -31,58 +32,57 @@ graph TB
 - Message passing com webview
 - Integração com VS Code API
 
-**Comandos Registrados**:
-- `agent-skills-manager.sync` - Sincronizar patterns
-- `agent-skills-manager.config` - Abrir configuração
-- `agent-skills-manager.refresh` - Atualizar tree view
+**Comandos Registrados**: 🔴 Pendente implementação
+- `agent-skills-manager.sync` - Sincronizar patterns (planejado)
+- `agent-skills-manager.config` - Abrir configuração (planejado)
+- `agent-skills-manager.refresh` - Atualizar tree view (planejado)
 
 **Arquivos Principais**:
-- [`src/extension.ts`](https://github.com/gugacarbo/agent-skills-manager/tree/main/extension/src/extension.ts) - Ponto de entrada
-- [`esbuild.js`](https://github.com/gugacarbo/agent-skills-manager/tree/main/extension/esbuild.js) - Configuração de build
+- `src/extension.ts` - Ponto de entrada
+- `esbuild.js` - Configuração de build com esbuild
 
 ### 2. Webview UI
 
 **Localização**: `webview/`
 
+**Status**: 🟡 App básico funciona, componentes pendentes
+
 **Stack Tecnológico**:
 - React 19
 - TypeScript
 - Vite (build)
-- React Hooks + Context (state)
+- shadcn/ui (componentes)
+- Tailwind CSS v4
 
 **Componentes**:
 
 #### App.tsx
 - Root component
-- Estado global
-- Roteamento
-- Theme provider
 
 #### TreeView
-- Navegação hierárquica por skills e agents
-- Virtualização para listas grandes
-- Interações: click, double-click, right-click
+- Navegação hierárquica por skills e agents (planejado)
+- Virtualização para listas grandes (planejado)
+- **Status**: Não implementado
 
 #### Config Panel
 - Visualização e edição de configuração
 - Integração com VS Code settings
-- Validação em tempo real
 
 #### Sync Panel
-- Controles de sincronização
-- Preview de changes
-- Resolução de conflitos
+- Controles de sincronização (planejado)
+- Preview de changes (planejado)
+- **Status**: Não implementado
 
 ### 3. Path Resolver
 
-**Localização**: `shared/`
+**Localização**: `shared/src/`
 
 **Responsabilidades**:
 - Normalização de paths
 - Validação de diretórios
 - Resolução de caminhos relativos/absolutos
 
-**Uso**:
+**API**:
 ```typescript
 const resolver = new PathResolver(workspaceRoot)
 const skillsPath = resolver.resolve('skills')
@@ -90,24 +90,21 @@ const skillsPath = resolver.resolve('skills')
 
 ### 4. Sync Engine
 
-**Localização**: `extension/src/` (implementação principal)
+**Localização**: `extension/src/` (planejado)
 
-**Responsabilidades**:
+**Responsabilidades (Planejadas)**:
 - Detecção de mudanças
 - Comparação de hashes (SHA-256)
 - Coordenação de cópia entre workspaces
-- Integração com Git
+- Integração com Git (simple-git)
 
-**Fluxo**:
+**Fluxo Planejado**:
 1. Monitora arquivos via file watcher
 2. Calcula hash dos arquivos modificados
 3. Compara com destino
 4. Resolve conflitos (automático ou manual)
 5. Executa sync e commit Git
 
-## Referências
-
-- [Estrutura de Diretórios](./02-estrutura-diretorios.md) - Organização do código
-- [Padrões de Projeto](./03-padroes-projeto.md) - Message passing e padrões
-- [Configuração e Validação](../implementacao/01-configuracao-validacao.md) - Schema Zod
-- [Sincronização](../implementacao/02-sincronizacao.md) - Detalhes do Sync Engine
+**Dependências Planejadas**:
+- `simple-git` para operações Git
+- `crypto` (Node.js builtin) para hashes SHA-256

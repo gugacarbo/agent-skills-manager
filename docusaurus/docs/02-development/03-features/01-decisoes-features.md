@@ -22,6 +22,20 @@ description: Features priorizadas, critérios de sucesso e roadmap de funcionali
 - Skill composer visual
 - Portable packages
 
+## Status por Feature
+
+| Feature          | Fase | Prioridade |
+| ---------------- | ---- | ---------- |
+| Core Extension   | 1    | Alta       |
+| Core Webview     | 1    | Alta       |
+| Path Resolver    | 1    | Alta       |
+| Config System    | 1    | Alta       |
+| Sync Engine      | 2    | Média      |
+| Git Integration  | 2    | Média      |
+| Template Library | 3    | Baixa      |
+| Multi-Agent      | 4    | Baixa      |
+
+
 ## Features Priorizadas
 
 ### Fase 3 - UI/UX Avançada
@@ -103,8 +117,3 @@ description: Features priorizadas, critérios de sucesso e roadmap de funcionali
 - Foco em entregar valor rápido
 - Iteração > perfeição inicial
 - Usuário no controle sempre
-
-## Referências
-
-- [Fases da Implementação](../roadmap/01-fases-implementacao.md) - Roadmap detalhado
-- [Criterios de Aceite](../roadmap/02-criterios-aceite.md) - Métricas de sucesso

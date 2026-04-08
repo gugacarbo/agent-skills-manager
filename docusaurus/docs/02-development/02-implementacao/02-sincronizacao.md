@@ -17,23 +17,6 @@ graph LR
     B --> F[Conflict Resolver]
 ```
 
-### Componentes
-
-#### Sync Engine
-- Detecção de mudanças
-- Comparação (timestamps, hashes)
-- Coordenação de cópia
-- Integração Git
-
-#### Path Resolver
-- Normalização de paths
-- Validação de diretórios
-
-#### Conflict Resolver
-- Classificação de tipos de conflito
-- Merge automático quando possível
-- Fallback para intervenção humana
-
 ## 2. Detecção de Mudanças
 
 ### Estratégias
@@ -95,8 +78,3 @@ graph TD
 - Audit trail de mudanças
 - Rollback de operações
 
-## Referências
-
-- [Configuração](./01-configuracao-validacao.md) - Schema e validação
-- [Path Resolver](./03-path-resolver.md) - Resolução de caminhos
-- [Fases da Implementação](../roadmap/01-fases-implementacao.md) - Status e roadmap

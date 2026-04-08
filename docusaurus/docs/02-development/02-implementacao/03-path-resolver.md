@@ -10,6 +10,16 @@ description: Módulo de resolução e normalização de caminhos
 
 Módulo responsável por normalizar, resolver e validar caminhos de arquivos e diretórios no filesystem.
 
+## Implementação
+
+**Localização**: `shared/src/path-resolver.ts`
+
+**Próximos Passos**:
+1. Criar `shared/src/path-resolver.ts`
+2. Implementar classe `PathResolver`
+3. Adicionar testes unitários
+4. Exportar em `shared/src/index.ts`
+
 ## Responsabilidades
 
 1. **Normalização**: Converte caminhos para formato padronizado
@@ -53,9 +63,3 @@ const exists = await resolver.exists('skills/react/')
 | Multi-workspace | Resolve paths entre diferentes workspaces |
 | Sincronização   | Normaliza caminhos antes de copiar        |
 | Validação       | Verifica estrutura de diretórios          |
-
-## Referências
-
-- [Configuração](./01-configuracao-validacao.md) - Schema e validação
-- [Sincronização](./02-sincronizacao.md) - Detalhes do Sync Engine
-- [Componentes](../arquitetura/01-componentes.md) - Visão geral dos componentes

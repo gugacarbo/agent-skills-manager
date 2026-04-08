@@ -13,42 +13,43 @@ gantt
     title Roadmap Agent Skills Manager
     dateFormat  YYYY-MM-DD
     section Fase 1
-    Core Foundation       :done, f1, 2024-01-01, 2024-03-31
+    Core Foundation       :active, f1, 2024-01-01, 2026-04-30
     section Fase 2
-    Sync Engine           :active, f2, 2024-04-01, 2024-06-30
-    Git Integration       :active, f2, 2024-04-01, 2024-06-30
+    Sync Engine           :f2, 2026-05-01, 2026-07-31
+    Git Integration       :f2, 2026-05-01, 2026-07-31
     section Fase 3
-    UI/UX Avançada        :f3, 2024-07-01, 2024-09-30
+    UI/UX Avançada        :f3, 2026-08-01, 2026-10-31
     section Fase 4
-    Recursos Avançados    :f4, 2024-10-01, 2024-12-31
+    Recursos Avançados    :f4, 2026-11-01, 2027-01-31
     section Fase 5
-    IA e Automação        :f5, 2025-01-01, 2025-06-30
+    IA e Automação        :f5, 2027-02-01, 2027-07-31
 ```
 
 ---
 
-## Fase 1 - Core Foundation ✅
+## Fase 1 - Core Foundation
 
-**Status**: ✅ Concluído
-
-**Período**: Q1 2024
+**Período**: Q1 2024 - Q2 2026
 
 ### Entregas
 
-- ✅ Estrutura extensão VS Code
-- ✅ Webview (React + TypeScript)
-- ✅ Path resolver
-- ✅ TreeView
-- ✅ Configuração JSON
-- ✅ VS Code API integration
+| Entrega                      | Descrição                         |
+| ---------------------------- | --------------------------------- |
+| Estrutura extensão VS Code   | Pastas e configs criadas          |
+| Webview (React + TypeScript) | Build configurado                 |
+| Path resolver                | Documentado, não implementado     |
+| TreeView                     | Documentado, não implementado     |
+| Configuração JSON            | Schema definido, não implementado |
+| VS Code API integration      | activate/deactivate vazios        |
 
 ### Critérios de Aceite
 
-- [x] Extensão carrega no VS Code
-- [x] Webview renderiza corretamente
-- [x] TreeView navega por skills/agents
-- [x] Configuração é lida/salva
-- [x] Message passing funciona
+- [ ] Extensão carrega no VS Code
+- [ ] Webview renderiza corretamente
+- [ ] TreeView navega por skills/agents
+- [ ] Configuração é lida/salva
+- [ ] Message passing funciona
+
 
 ### Lições Aprendidas
 
@@ -58,11 +59,9 @@ gantt
 
 ---
 
-## Fase 2 - Sincronização e Git 🔄
+## Fase 2 - Sincronização e Git
 
-**Status**: 🔄 Em desenvolvimento
-
-**Período**: Q2 2024
+**Período**: Q2-Q3 2026
 
 ### Entregas
 
@@ -98,8 +97,8 @@ gantt
 
 ### Dependências
 
-- Schema Zod de configuração ✅
-- Path resolver funcional ✅
+- Schema Zod de configuração
+- Path resolver funcional
 - Git operations implementadas
 
 ### Riscos
@@ -180,8 +179,3 @@ gantt
 - [ ] Compartilhamento de skills via Git
 - [ ] Code review de skills
 - [ ] Versionamento semântico
-
-## Referências
-
-- [Criterios de Aceite](./02-criterios-aceite.md) - Métricas detalhadas
-- [Decisões de Features](../features/01-decisoes-features.md) - Priorização

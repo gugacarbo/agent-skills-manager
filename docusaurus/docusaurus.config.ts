@@ -47,6 +47,13 @@ const config: Config = {
 		colorMode: {
 			respectPrefersColorScheme: true,
 		},
+		mermaid: {
+			theme: {
+				light: "neutral",
+				dark: "dark",
+			},
+			options: {},
+		},
 		navbar: {
 			title: "Agent Skills Manager",
 			logo: {

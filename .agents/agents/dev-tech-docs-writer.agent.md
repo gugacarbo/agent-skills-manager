@@ -96,7 +96,7 @@ Use componentes de documentação apenas quando acrescentarem precisão real:
 
 | Componente | Uso |
 | --- | --- |
-| `<Note>` | Convenções, terminologia e contexto fixo |
+| `>` | Convenções, terminologia e contexto fixo |
 | `<Pitfall>` | Erros comuns isolados |
 | `<DeepDive>` | Detalhes avançados e de baixo nível |
 | `<Canary>` / `<CanaryBadge />` | Recursos canary |

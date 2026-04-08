@@ -65,8 +65,3 @@ A extensão valida configurações ao iniciar:
 3. Reporta erros no Output panel
 
 Erros de validação são reportados no Output do VS Code.
-
-## Referências
-
-- [Visão Geral da Arquitetura](./01-visao-geral) - Componentes de configuração
-- [Decisões de Arquitetura](./05-decisoes-arquitetura) - Decisões de design

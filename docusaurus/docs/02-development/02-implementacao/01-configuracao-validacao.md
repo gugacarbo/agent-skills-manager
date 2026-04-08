@@ -16,6 +16,11 @@ description: Schema Zod, arquivos de configuração e fluxo de validação
 - Mensagens de erro claras e úteis
 - Schema como fonte de verdade única
 
+**Implementação**:
+1. Instalar `zod` no shared package
+2. Implementar `ConfigSchema` em `shared/src/types.ts`
+3. Exportar tipos e validadores
+
 ## 2. Schema de Configuração
 
 ```typescript
@@ -141,8 +146,3 @@ function loadConfig(filePath: string): Config {
   }
 }
 ```
-
-## Referências
-
-- [Sincronização](./02-sincronizacao.md) - Detalhes do Sync Engine
-- [Path Resolver](./03-path-resolver.md) - Resolução de caminhos

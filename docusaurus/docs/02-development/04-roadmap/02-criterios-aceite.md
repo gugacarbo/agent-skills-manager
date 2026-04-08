@@ -81,6 +81,3 @@ description: Métricas de sucesso e checklist de aceitação por fase
 - [ ] Aplicação em 1 clique
 - [ ] Templates atualizáveis
 
-## Referências
-
-- [Fases da Implementação](./01-fases-implementacao.md) - Roadmap completo
