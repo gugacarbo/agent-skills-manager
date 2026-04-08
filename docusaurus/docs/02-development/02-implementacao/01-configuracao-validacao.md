@@ -17,7 +17,7 @@ description: Schema Zod, arquivos de configuração e fluxo de validação
 - Schema como fonte de verdade única
 
 **Implementação**:
-1. Instalar `zod` no shared package
+1. ✅ `zod` instalado no shared package
 2. Implementar `ConfigSchema` em `shared/src/types.ts`
 3. Exportar tipos e validadores
 
@@ -78,7 +78,9 @@ export type Config = z.infer<typeof ConfigSchema>
 
 ### Configuração Global
 
-**Path**: `~/.vscode/extensions/agent-skills-manager/config.json`
+**Armazenamento**: `ExtensionContext.globalState` (VS Code API)
+
+**Formato**: JSON serializado
 
 **Escopo**: Todos os workspaces
 
@@ -87,6 +89,8 @@ export type Config = z.infer<typeof ConfigSchema>
 ### Configuração por Workspace
 
 **Path**: `.vscode/agent-skills-manager.json`
+
+**Criação**: Automática mediante ação do usuário (comando ou primeira edição)
 
 **Escopo**: Projeto específico
 
@@ -101,7 +105,15 @@ export type Config = z.infer<typeof ConfigSchema>
 }
 ```
 
-## 5. Fluxo de Validação
+## 5. Precedência de Configuração
+
+**Ordem de resolução (maior prioridade para menor)**:
+1. `.vscode/agent-skills-manager.json` (workspace)
+2. Settings do VS Code (`agent-skills-manager.*`)
+3. `globalState` da extensão
+4. Defaults do `ConfigSchema`
+
+## 6. Fluxo de Validação
 
 ```mermaid
 sequenceDiagram

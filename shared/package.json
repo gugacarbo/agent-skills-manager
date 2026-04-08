@@ -14,5 +14,8 @@
 		"@types/node": "^25.5.2",
 		"@types/vscode": "^1.110.0",
 		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"zod": "^4.3.6"
 	}
 }

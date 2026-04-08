@@ -24,18 +24,16 @@ graph TB
 
 **Localização**: `extension/`
 
-**Status**: 🟡 Estrutura criada, implementação pendente
-
 **Responsabilidades**:
 - Ativação e lifecycle management
 - Registro de comandos VS Code
 - Message passing com webview
 - Integração com VS Code API
 
-**Comandos Registrados**: 🔴 Pendente implementação
-- `agent-skills-manager.sync` - Sincronizar patterns (planejado)
-- `agent-skills-manager.config` - Abrir configuração (planejado)
-- `agent-skills-manager.refresh` - Atualizar tree view (planejado)
+**Comandos Registrados**:
+- `agent-skills-manager.sync` - Sincronizar patterns
+- `agent-skills-manager.config` - Abrir configuração
+- `agent-skills-manager.refresh` - Atualizar tree view
 
 **Arquivos Principais**:
 - `src/extension.ts` - Ponto de entrada
@@ -44,8 +42,6 @@ graph TB
 ### 2. Webview UI
 
 **Localização**: `webview/`
-
-**Status**: 🟡 App básico funciona, componentes pendentes
 
 **Stack Tecnológico**:
 - React 19
@@ -60,18 +56,16 @@ graph TB
 - Root component
 
 #### TreeView
-- Navegação hierárquica por skills e agents (planejado)
-- Virtualização para listas grandes (planejado)
-- **Status**: Não implementado
+- Navegação hierárquica por skills e agents
+- Virtualização para listas grandes
 
 #### Config Panel
 - Visualização e edição de configuração
 - Integração com VS Code settings
 
 #### Sync Panel
-- Controles de sincronização (planejado)
-- Preview de changes (planejado)
-- **Status**: Não implementado
+- Controles de sincronização
+- Preview de changes
 
 ### 3. Path Resolver
 
@@ -90,21 +84,21 @@ const skillsPath = resolver.resolve('skills')
 
 ### 4. Sync Engine
 
-**Localização**: `extension/src/` (planejado)
+**Localização**: `extension/src/`
 
-**Responsabilidades (Planejadas)**:
+**Responsabilidades**:
 - Detecção de mudanças
 - Comparação de hashes (SHA-256)
 - Coordenação de cópia entre workspaces
 - Integração com Git (simple-git)
 
-**Fluxo Planejado**:
+**Fluxo**:
 1. Monitora arquivos via file watcher
 2. Calcula hash dos arquivos modificados
 3. Compara com destino
 4. Resolve conflitos (automático ou manual)
 5. Executa sync e commit Git
 
-**Dependências Planejadas**:
+**Dependências**:
 - `simple-git` para operações Git
 - `crypto` (Node.js builtin) para hashes SHA-256

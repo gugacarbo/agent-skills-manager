@@ -81,13 +81,13 @@ shared/
 
 **Propósito**: Código compartilhado entre extension e webview
 
-**Implementação Pendente**:
-- `path-resolver.ts` - Resolução de paths (documentado, não implementado)
-- `types.ts` - Interfaces e schemas Zod (planejado)
+**Próximos Passos**:
+- `path-resolver.ts` - Resolução de paths
+- `types.ts` - Interfaces e schemas Zod
 - `index.ts` - Exportação de módulos
 
-**Dependências Planejadas**:
-- `zod` - Validação de schemas (não instalado)
+**Dependências**:
+- `zod` - Validação de schemas
 
 ## Referências
 

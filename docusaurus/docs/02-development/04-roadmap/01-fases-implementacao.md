@@ -13,14 +13,14 @@ gantt
     title Roadmap Agent Skills Manager
     dateFormat  YYYY-MM-DD
     section Fase 1
-    Core Foundation       :active, f1, 2024-01-01, 2026-04-30
+    Core Foundation       :done, f1, 2024-01-01, 2026-04-07
     section Fase 2
-    Sync Engine           :f2, 2026-05-01, 2026-07-31
-    Git Integration       :f2, 2026-05-01, 2026-07-31
+    Sync Engine           :f2, 2026-04-15, 2026-07-31
+    Git Integration       :f2, 2026-04-15, 2026-07-31
     section Fase 3
-    UI/UX Avançada        :f3, 2026-08-01, 2026-10-31
+    UI/UX Avançada        :f3, 2026-08-01, 2026-10-15
     section Fase 4
-    Recursos Avançados    :f4, 2026-11-01, 2027-01-31
+    Recursos Avançados    :f4, 2026-10-16, 2027-01-31
     section Fase 5
     IA e Automação        :f5, 2027-02-01, 2027-07-31
 ```
@@ -33,14 +33,14 @@ gantt
 
 ### Entregas
 
-| Entrega                      | Descrição                         |
-| ---------------------------- | --------------------------------- |
-| Estrutura extensão VS Code   | Pastas e configs criadas          |
-| Webview (React + TypeScript) | Build configurado                 |
-| Path resolver                | Documentado, não implementado     |
-| TreeView                     | Documentado, não implementado     |
-| Configuração JSON            | Schema definido, não implementado |
-| VS Code API integration      | activate/deactivate vazios        |
+| Entrega                      | Descrição                      |
+| ---------------------------- | ------------------------------ |
+| Estrutura extensão VS Code   | Pastas e configs criadas       |
+| Webview (React + TypeScript) | Build configurado              |
+| Path resolver                | Módulo implementado            |
+| TreeView                     | Navegação hierárquica          |
+| Configuração JSON            | Schema Zod implementado        |
+| VS Code API integration      | activate/deactivate funcionais |
 
 ### Critérios de Aceite
 
@@ -93,7 +93,7 @@ gantt
 #### Histórico de Operações
 - [ ] Log de operações realizadas
 - [ ] Audit trail de mudanças
-- [ ] Rollback de operações
+- ~~[ ] Rollback de operações~~ (removido da Fase 2)
 
 ### Dependências
 
@@ -117,14 +117,12 @@ gantt
 
 ## Fase 3 - UI/UX Avançada 📋
 
-**Status**: 📋 Planejado
-
-**Período**: Q3 2024
+**Período**: Q3 2026
 
 ### Entregas
 
-#### Editor Visual
-- [ ] Editor de skills (drag-and-drop)
+#### Editor Assistido
+- [ ] Editor de skills assistido (sem drag-and-drop)
 - [ ] Preview em tempo real
 - [ ] Validação de schema inline
 - [ ] Syntax highlighting
@@ -157,17 +155,13 @@ gantt
 
 ## Fase 4 - Recursos Avançados 📋
 
-**Status**: 📋 Planejado
-
-**Período**: Q4 2024
+**Período**: Q4 2026 - Q1 2027
 
 ### Entregas
 
-#### Templates e Presets
-- [ ] Biblioteca de templates de skills
-- [ ] Presets por linguagem/framework
-- [ ] Import/export de configurações
-- [ ] Community templates (futuro)
+~~#### Templates e Presets~~ (Removido temporariamente)
+
+> 🚫 **Feature removida do roadmap**. Template Library foi descontinuada desta fase.
 
 #### Multi-Workspace
 - [ ] Gerenciamento de múltiplos destinos

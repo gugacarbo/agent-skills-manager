@@ -39,14 +39,32 @@ webview.postMessage({
 
 ## Tipos de Mensagem
 
-| Tipo            | Direção             | Payload                   | Descrição                   |
-| --------------- | ------------------- | ------------------------- | --------------------------- |
-| `SYNC_PATTERN`  | Webview → Extension | `{ destination: string }` | Inicia sincronização        |
-| `SYNC_COMPLETE` | Extension → Webview | `{ status, data }`        | Sync finalizado             |
-| `SYNC_ERROR`    | Extension → Webview | `{ error }`               | Erro no sync                |
-| `CONFIG_UPDATE` | Bidirecional        | `{ config }`              | Atualização de configuração |
-| `TREE_REFRESH`  | Extension → Webview | `{ }`                     | TreeView precisa atualizar  |
-| `GET_STATUS`    | Webview → Extension | `{ }`                     | Request status              |
+### Core
+
+| Tipo            | Direção             | Payload                      | Descrição                   |
+| --------------- | ------------------- | ---------------------------- | --------------------------- |
+| `GET_STATUS`    | Webview → Extension | `{}`                         | Request de status           |
+| `STATUS_UPDATE` | Extension → Webview | `{ capabilities: string[] }` | Status atual e capabilities |
+| `CONFIG_UPDATE` | Bidirecional        | `{ config }`                 | Atualização de configuração |
+
+### Sync Capability
+
+| Tipo            | Direção             | Payload                   | Descrição                  |
+| --------------- | ------------------- | ------------------------- | -------------------------- |
+| `SYNC_PATTERN`  | Webview → Extension | `{ destination: string }` | Inicia sincronização       |
+| `SYNC_COMPLETE` | Extension → Webview | `{ status, data }`        | Sync finalizado            |
+| `SYNC_ERROR`    | Extension → Webview | `{ error }`               | Erro no sync               |
+| `TREE_REFRESH`  | Extension → Webview | `{}`                      | TreeView precisa atualizar |
+
+## Contrato de Tipos
+
+**Decisão**: usar união discriminada compartilhada em `shared/src/types.ts`, consumida por extension e webview.
+
+Benefícios:
+- Evita drift entre implementações
+- Garante exaustividade de `switch` por `type`
+- Simplifica evolução do protocolo de mensagens
+- Capabilities definidas como tipos compartilhados para descoberta em runtime
 
 ## Tratamento de Erros
 

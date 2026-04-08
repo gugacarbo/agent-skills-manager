@@ -14,7 +14,7 @@ Módulo responsável por normalizar, resolver e validar caminhos de arquivos e d
 
 **Localização**: `shared/src/path-resolver.ts`
 
-**Próximos Passos**:
+**Passos**:
 1. Criar `shared/src/path-resolver.ts`
 2. Implementar classe `PathResolver`
 3. Adicionar testes unitários

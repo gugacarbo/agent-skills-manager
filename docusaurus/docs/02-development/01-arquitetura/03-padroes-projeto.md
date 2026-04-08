@@ -26,14 +26,24 @@ webview.postMessage({
 })
 ```
 
-### Tipos de Mensagem
+### Tipos de Mensagem por Capability
 
-| Tipo            | Direção             | Descrição                   |
-| --------------- | ------------------- | --------------------------- |
-| `SYNC_PATTERN`  | Webview → Extension | Inicia sincronização        |
-| `SYNC_COMPLETE` | Extension → Webview | Sync finalizado             |
-| `CONFIG_UPDATE` | Bidirecional        | Atualização de configuração |
-| `TREE_REFRESH`  | Extension → Webview | TreeView precisa atualizar  |
+#### Core (sempre habilitado)
+
+| Tipo            | Direção             | Descrição                           |
+| --------------- | ------------------- | ----------------------------------- |
+| `GET_STATUS`    | Webview → Extension | Solicita status atual               |
+| `STATUS_UPDATE` | Extension → Webview | Retorna status e capacidades ativas |
+| `CONFIG_UPDATE` | Bidirecional        | Atualização de configuração         |
+
+#### Sync Capability (quando sincronização estiver habilitada)
+
+| Tipo            | Direção             | Descrição                  |
+| --------------- | ------------------- | -------------------------- |
+| `SYNC_PATTERN`  | Webview → Extension | Inicia sincronização       |
+| `SYNC_COMPLETE` | Extension → Webview | Sync finalizado            |
+| `SYNC_ERROR`    | Extension → Webview | Erro no sync               |
+| `TREE_REFRESH`  | Extension → Webview | TreeView precisa atualizar |
 
 ## Path Resolution
 
@@ -56,6 +66,15 @@ interface AppConfig {
   syncDirection: 'push' | 'pull' | 'bidirectional'
   autoSync: boolean
 }
+
+type ExtensionMessage =
+  | { type: 'GET_STATUS' }
+  | { type: 'STATUS_UPDATE'; payload: { capabilities: string[] } }
+  | { type: 'CONFIG_UPDATE'; payload: { config: AppConfig } }
+  | { type: 'SYNC_PATTERN'; payload: { destination: string } }
+  | { type: 'SYNC_COMPLETE'; payload: { status: 'success'; syncedFiles: number } }
+  | { type: 'SYNC_ERROR'; payload: { error: string } }
+  | { type: 'TREE_REFRESH' }
 ```
 
 ## Referências
